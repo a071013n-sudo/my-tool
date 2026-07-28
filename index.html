@@ -1,11 +1,395 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>Hello</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>最近つくったもの | CREATIONS & PROJECTS</title>
+<meta name="description" content="授業や学級事務のために作った自作アプリケーションを紹介し、インストール不要でダウンロードできるページです。">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+  /* =========================================================
+     design tokens ― ロゴ/バナー画像から抽出した配色
+     クリーム地   : #F6F1DE   クリーム(濃): #F4EED9
+     セージ(淡)   : #C7CBB2   セージ(濃)   : #93A67D
+     深緑(文字)   : #263420   ゴールド     : #C9A972
+     ========================================================= */
+  :root{
+    --paper:#F6F1DE;
+    --paper-deep:#F4EED9;
+    --sage-pale:#C7CBB2;
+    --sage:#93A67D;
+    --sage-dark:#5E7350;
+    --ink:#263420;
+    --ink-soft:#5C6753;
+    --gold:#C9A972;
+    --card:#FFFEFA;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% 0%, var(--paper-deep), transparent 70%),
+      var(--paper);
+    color:var(--ink);
+    font-family:"Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
+    line-height:1.8;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:"Shippori Mincho", serif;
+    margin:0;
+    font-weight:600;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- ヒーロー(ロゴ) ---------- */
+  .hero{
+    padding:64px 24px 8px;
+    text-align:center;
+  }
+  .hero .logo{
+    width:min(420px, 78vw);
+    margin:0 auto;
+  }
+  .hero p.lead{
+    max-width:480px;
+    margin:4px auto 0;
+    font-size:14.5px;
+    color:var(--ink-soft);
+  }
+  /* 細いゴールドの区切り線(ロゴとバナーの間) */
+  .gold-rule{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    width:200px;
+    margin:30px auto 0;
+  }
+  .gold-rule::before,
+  .gold-rule::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:linear-gradient(to var(--dir,right), transparent, var(--gold));
+  }
+  .gold-rule::after{ --dir:left; }
+  .gold-rule .dot{
+    width:5px;height:5px;
+    background:var(--gold);
+    transform:rotate(45deg);
+    flex:none;
+  }
+
+  /* ---------- バナー帯 ---------- */
+  .banner-strip{
+    background:var(--paper-deep);
+    padding:0;
+    margin-top:44px;
+  }
+  .banner-strip img{
+    width:100%;
+    max-width:1040px;
+    margin:0 auto;
+  }
+
+  /* ---------- 本文セクション ---------- */
+  .wrap{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  .section-title{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    margin:64px 0 8px;
+  }
+  .section-title h2{
+    font-size:22px;
+    color:var(--sage-dark);
+  }
+  .section-title .count{
+    font-size:13px;
+    color:var(--ink-soft);
+    font-family:"Zen Kaku Gothic New",sans-serif;
+  }
+  .section-note{
+    color:var(--ink-soft);
+    font-size:14px;
+    margin-bottom:34px;
+  }
+
+  /* ---------- カードグリッド ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:28px;
+    padding-bottom:80px;
+  }
+  .card{
+    background:var(--card);
+    border:1px solid #EAE8DA;
+    border-radius:3px;
+    box-shadow:0 1px 0 rgba(46,59,44,0.04);
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    transform:translateY(10px);
+    animation:riseIn .5s ease forwards;
+  }
+  @keyframes riseIn{ to{opacity:1; transform:translateY(0);} }
+
+  .card .thumb-wrap{
+    position:relative;
+    aspect-ratio:4/3;
+    background:
+      linear-gradient(135deg, #F1EDDA, var(--sage-pale));
+    overflow:hidden;
+  }
+  .card .thumb-wrap img{
+    width:100%;height:100%;object-fit:cover;
+  }
+  .card .thumb-wrap .no-thumb{
+    width:100%;height:100%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--sage-dark);
+    font-size:13px;
+    font-family:"Zen Kaku Gothic New",sans-serif;
+  }
+  /* 紙テープで留めた風の演出 */
+  .tape{
+    position:absolute;
+    top:-10px; left:16px;
+    width:64px; height:26px;
+    background:var(--gold);
+    opacity:0.85;
+    transform:rotate(-6deg);
+    box-shadow:0 2px 3px rgba(0,0,0,0.08);
+  }
+
+  .card .body{
+    padding:20px 20px 22px;
+  }
+  .card h3{
+    font-size:17px;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .card .desc{
+    font-size:13.5px;
+    color:var(--ink-soft);
+    min-height:2.6em;
+    margin-bottom:16px;
+    white-space:pre-line;
+  }
+  .card .meta{
+    font-size:12px;
+    color:#8B9587;
+    margin-bottom:14px;
+    font-family:"Zen Kaku Gothic New",sans-serif;
+  }
+
+  .btn-dl{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--sage);
+    color:#fff;
+    text-decoration:none;
+    font-size:13.5px;
+    font-weight:700;
+    padding:10px 18px;
+    border-radius:999px;
+    transition:background .18s ease, transform .18s ease;
+  }
+  .btn-dl:hover{ background:var(--sage-dark); transform:translateY(-1px); }
+  .btn-dl:focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+  .btn-dl svg{width:14px;height:14px;flex:none;}
+
+  /* ---------- 状態表示(読み込み中・エラー・空) ---------- */
+  .state-box{
+    border:1px dashed #CFC7A6;
+    border-radius:4px;
+    padding:40px 24px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:14px;
+    margin-bottom:80px;
+  }
+  .state-box strong{ color:var(--sage-dark); display:block; margin-bottom:6px; font-family:"Shippori Mincho",serif; font-size:16px;}
+  .dot-loader::after{
+    content:"";
+    display:inline-block;
+    width:1em;
+    text-align:left;
+    animation:dots 1.3s steps(4,end) infinite;
+  }
+  @keyframes dots{ 0%{content:"";} 25%{content:".";} 50%{content:"..";} 75%{content:"...";} }
+
+  footer{
+    text-align:center;
+    padding:36px 24px 50px;
+    color:#8E8768;
+    font-size:12px;
+    border-top:1px solid #E5DDC0;
+  }
+</style>
 </head>
 <body>
-  <h1>Hello.<br>
-	hello.</h1>
+
+<header class="hero">
+  <img class="logo" src="assets/logo.png" alt="最近つくったもの CREATIONS & PROJECTS">
+  <p class="lead">授業や学級事務のために作った自作アプリケーションを置いています。気に入ったものがあれば、自由にダウンロードしてお使いください。</p>
+  <div class="gold-rule"><span class="dot"></span></div>
+</header>
+
+<div class="banner-strip">
+  <img src="assets/banner.png" alt="インストール不要で使えます INSTALLATION-FREE CONVENIENCE.">
+</div>
+
+<main class="wrap">
+  <div class="section-title">
+    <h2>公開中のアプリケーション</h2>
+    <span class="count" id="app-count"></span>
+  </div>
+  <p class="section-note">配布ファイルとサムネイルは、このリポジトリの <code>apps/</code> フォルダに直接置いています。新しいツールを追加したら <code>apps/apps.json</code> に1件追記してください。</p>
+
+  <div id="state" class="state-box">
+    <strong>読み込み中<span class="dot-loader"></span></strong>
+    apps/apps.json を読み込んでいます
+  </div>
+
+  <div id="grid" class="grid" hidden></div>
+</main>
+
+<footer>
+  最近つくったもの ・ このサイトは GitHub Pages で公開されています
+</footer>
+
+<script>
+/* =====================================================================
+   仕組み
+   ---------------------------------------------------------------------
+   このページは同じリポジトリ内の apps/apps.json を読み込み、
+   そこに書かれた情報からカードを自動生成します。
+   外部のAPIやキーは一切使いません(すべて自分のリポジトリ内で完結)。
+
+   新しいアプリを追加する手順:
+     1. apps/ の下に新しいフォルダを作る (例: apps/my-tool/)
+     2. その中に「サムネイル画像」と「配布ファイル」を置く
+     3. apps/apps.json に1件、以下の形式で追記する
+
+     {
+       "name": "アプリ名",
+       "description": "紹介文(2〜3行程度)",
+       "thumbnail": "apps/my-tool/thumbnail.png",
+       "file": "apps/my-tool/my-tool.zip",
+       "fileLabel": "my-tool.zip (2.1MB)"
+     }
+
+   注意:
+     ・GitHub は1ファイル100MBまで(推奨は50MB以下)。
+       大きな実行ファイルなどは GitHub Releases にアップロードし、
+       file にそのダウンロードURLを書く方法もあります。
+     ・リポジトリを Public にしないと、GitHub Pages 上から
+       誰でもダウンロードすることはできません。
+   ===================================================================== */
+
+  const MANIFEST_URL = "apps/apps.json";
+
+  const stateBox = document.getElementById('state');
+  const grid = document.getElementById('grid');
+  const countLabel = document.getElementById('app-count');
+
+  function escapeHtml(str){
+    return (str || "").replace(/[&<>"']/g, s => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[s]));
+  }
+
+  async function loadApps(){
+    const res = await fetch(MANIFEST_URL, { cache: "no-store" });
+    if(!res.ok){
+      throw new Error(`apps.json の取得に失敗しました (${res.status})`);
+    }
+    const apps = await res.json();
+
+    if(!Array.isArray(apps) || apps.length === 0){
+      showState(
+        "まだ何も置かれていません",
+        "apps/apps.json にアプリ情報を追記してください。"
+      );
+      return;
+    }
+
+    apps.sort((a,b) => (a.name || "").localeCompare(b.name || "", 'ja'));
+    renderApps(apps);
+  }
+
+  function showState(title, message){
+    stateBox.hidden = false;
+    grid.hidden = true;
+    stateBox.innerHTML = `<strong>${escapeHtml(title)}</strong>${escapeHtml(message)}`;
+  }
+
+  function renderApps(apps){
+    stateBox.hidden = true;
+    grid.hidden = false;
+    countLabel.textContent = `全 ${apps.length} 件`;
+
+    grid.innerHTML = apps.map((app, i) => `
+      <article class="card" style="animation-delay:${Math.min(i*60, 480)}ms">
+        <div class="thumb-wrap">
+          <span class="tape" aria-hidden="true"></span>
+          ${
+            app.thumbnail
+              ? `<img src="${escapeHtml(app.thumbnail)}" alt="${escapeHtml(app.name)}のサムネイル" loading="lazy">`
+              : `<div class="no-thumb">サムネイル未登録</div>`
+          }
+        </div>
+        <div class="body">
+          <h3>${escapeHtml(app.name)}</h3>
+          <p class="desc">${escapeHtml(app.description || "紹介文はまだ登録されていません。")}</p>
+          ${
+            app.fileLabel
+              ? `<p class="meta">${escapeHtml(app.fileLabel)}</p>`
+              : ``
+          }
+          ${
+            app.file
+              ? `<a class="btn-dl" href="${escapeHtml(app.file)}" download>
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                     <path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/>
+                   </svg>
+                   ダウンロード
+                 </a>`
+              : `<p class="meta">配布ファイル未登録</p>`
+          }
+        </div>
+      </article>
+    `).join("");
+  }
+
+  loadApps().catch(err => {
+    console.error(err);
+    showState(
+      "読み込みに失敗しました",
+      "apps/apps.json の場所や内容(JSONの書式)をご確認ください。詳細はブラウザのコンソールに出力しています。"
+    );
+  });
+</script>
+
 </body>
 </html>

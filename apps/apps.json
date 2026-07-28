@@ -1,0 +1,10 @@
+[
+  {
+    "name": "QUコードをオフラインで生成",
+    "description": "校務PCに来てしまったURLをQRコードにできます。
+ネットワークに接続できる端末のカメラやスマホで、URLに簡単にアクセスできるようになります。",
+    "thumbnail": "apps/QRコード生成/QRコード生成サムネ.png",
+    "file": "apps/QRコード生成/QRコード生成html",
+    "fileLabel": "QRコード生成"
+  }
+]
