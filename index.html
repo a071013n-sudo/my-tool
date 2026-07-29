@@ -157,15 +157,26 @@
   .thumb{
     width:100%;
     aspect-ratio:16/9;
-    background:var(--accent-soft);
+    background:
+      repeating-linear-gradient(135deg,
+        rgba(91,140,86,0.06) 0px, rgba(91,140,86,0.06) 10px,
+        transparent 10px, transparent 20px),
+      var(--accent-soft);
     display:flex;
     align-items:center;
     justify-content:center;
     position:relative;
     overflow:hidden;
+    padding:16px;
   }
   .thumb img{
-    width:100%;height:100%;object-fit:cover;
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    border-radius:6px;
+    box-shadow:0 4px 14px rgba(47,75,44,0.15);
   }
   .thumb .fallback-icon{
     font-size:3rem;
@@ -262,7 +273,7 @@
 
 <div class="app">
   <aside class="sidebar">
-    <p class="sidebar-header">  公開ソフトウェア</p>
+    <p class="sidebar-header">🌱 公開ソフトウェア</p>
     <p class="sidebar-sub">github.com/your-account</p>
     <ul class="vine" id="soft-list"></ul>
   </aside>
@@ -280,7 +291,7 @@
 // repo: GitHubリポジトリのURL
 // ==========================================================
 const softwareList = [
-    {
+  {
     id: "QRcode-maker",
     icon: " ",
     name: "オフラインQRコード作成",
@@ -334,7 +345,7 @@ function renderCard(){
       </div>
       <div class="actions">
         <a class="btn btn-primary" href="${sw.download}" target="_blank" rel="noopener">
-          ? ダウンロード
+          ⬇ ダウンロード
         </a>
         <a class="btn btn-secondary" href="${sw.repo}" target="_blank" rel="noopener">
           GitHubで見る
