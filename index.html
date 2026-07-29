@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ソフトウェア公開ページ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F2F7EE;
+    --sidebar-bg:#E7F0DF;
+    --card-bg:#FFFFFF;
+    --line:#CFE0C2;
+    --accent:#5B8C56;
+    --accent-deep:#2F4B2C;
+    --accent-soft:#A9CB9B;
+    --text:#28331F;
+    --text-muted:#6E7C63;
+    --shadow: 0 8px 24px rgba(47,75,44,0.08);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Noto Sans JP", sans-serif;
+    min-height:100vh;
+  }
+  a{color:inherit;}
+
+  /* ---------- Layout ---------- */
+  .app{
+    display:flex;
+    min-height:100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    width:280px;
+    flex-shrink:0;
+    background:var(--sidebar-bg);
+    border-right:1px solid var(--line);
+    padding:32px 0 32px 28px;
+    position:relative;
+  }
+  .sidebar-header{
+    font-family:"Zen Maru Gothic", sans-serif;
+    font-weight:900;
+    font-size:1.15rem;
+    color:var(--accent-deep);
+    margin:0 0 4px 0;
+    letter-spacing:.02em;
+  }
+  .sidebar-sub{
+    font-family:"JetBrains Mono", monospace;
+    font-size:.72rem;
+    color:var(--text-muted);
+    margin:0 0 28px 0;
+  }
+
+  .vine{
+    position:relative;
+    padding-left:26px;
+  }
+  .vine::before{
+    content:"";
+    position:absolute;
+    left:5px;
+    top:6px;
+    bottom:6px;
+    width:2px;
+    background:linear-gradient(to bottom, var(--accent-soft), var(--line) 90%);
+    border-radius:2px;
+  }
+
+  .soft-item{
+    position:relative;
+    list-style:none;
+    margin:0 0 6px 0;
+  }
+  .soft-item::before{
+    /* leaf node */
+    content:"";
+    position:absolute;
+    left:-26px;
+    top:14px;
+    width:12px;
+    height:12px;
+    background:var(--card-bg);
+    border:2px solid var(--accent-soft);
+    border-radius:60% 60% 60% 0% / 60% 60% 40% 40%;
+    transform:rotate(45deg);
+    transition:all .25s ease;
+  }
+  .soft-item button{
+    all:unset;
+    display:block;
+    width:100%;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-family:"Noto Sans JP", sans-serif;
+    font-size:.92rem;
+    color:var(--text);
+    transition:background .2s ease, color .2s ease, transform .2s ease;
+  }
+  .soft-item button:hover{
+    background:rgba(91,140,86,0.1);
+    transform:translateX(2px);
+  }
+  .soft-item button:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:2px;
+  }
+  .soft-item.active::before{
+    background:var(--accent);
+    border-color:var(--accent-deep);
+    box-shadow:0 0 0 4px rgba(91,140,86,0.18);
+  }
+  .soft-item.active button{
+    background:var(--accent-soft);
+    color:var(--accent-deep);
+    font-weight:700;
+  }
+  .soft-item .tag{
+    display:block;
+    font-family:"JetBrains Mono", monospace;
+    font-size:.66rem;
+    color:var(--text-muted);
+    margin-top:1px;
+  }
+  .soft-item.active .tag{ color:var(--accent-deep); opacity:.75; }
+
+  /* ---------- Main ---------- */
+  .main{
+    flex:1;
+    padding:48px 56px;
+    display:flex;
+    justify-content:center;
+  }
+  .card{
+    width:100%;
+    max-width:680px;
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    animation:rise .35s ease;
+  }
+  @keyframes rise{
+    from{opacity:0; transform:translateY(8px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .thumb{
+    width:100%;
+    aspect-ratio:16/9;
+    background:var(--accent-soft);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .thumb img{
+    width:100%;height:100%;object-fit:cover;
+  }
+  .thumb .fallback-icon{
+    font-size:3rem;
+  }
+  .card-body{ padding:28px 32px 32px; }
+  .eyebrow{
+    font-family:"JetBrains Mono", monospace;
+    font-size:.72rem;
+    color:var(--accent);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin:0 0 8px 0;
+  }
+  h1.title{
+    font-family:"Zen Maru Gothic", sans-serif;
+    font-weight:900;
+    font-size:1.6rem;
+    color:var(--accent-deep);
+    margin:0 0 12px 0;
+    line-height:1.4;
+  }
+  .desc{
+    font-size:.95rem;
+    line-height:1.9;
+    color:var(--text);
+    margin:0 0 22px 0;
+    white-space:pre-line;
+  }
+  .meta-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:24px;
+  }
+  .meta-tags span{
+    font-family:"JetBrains Mono", monospace;
+    font-size:.72rem;
+    background:rgba(91,140,86,0.1);
+    color:var(--accent-deep);
+    padding:4px 10px;
+    border-radius:20px;
+    border:1px solid var(--accent-soft);
+  }
+  .actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:.9rem;
+    text-decoration:none;
+    transition:transform .15s ease, box-shadow .15s ease;
+    cursor:pointer;
+    border:1px solid transparent;
+  }
+  .btn:focus-visible{ outline:2px solid var(--accent-deep); outline-offset:2px; }
+  .btn-primary{
+    background:var(--accent);
+    color:#fff;
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 6px 16px rgba(91,140,86,.35); }
+  .btn-secondary{
+    background:transparent;
+    color:var(--accent-deep);
+    border-color:var(--line);
+  }
+  .btn-secondary:hover{ background:rgba(91,140,86,0.08); }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{animation:none;}
+    .btn:hover, .soft-item button:hover{transform:none;}
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 760px){
+    .app{flex-direction:column;}
+    .sidebar{
+      width:100%;
+      border-right:none;
+      border-bottom:1px solid var(--line);
+      padding:24px 20px;
+    }
+    .main{padding:28px 20px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <p class="sidebar-header">🌱 公開ソフトウェア</p>
+    <p class="sidebar-sub">github.com/your-account</p>
+    <ul class="vine" id="soft-list"></ul>
+  </aside>
+
+  <main class="main">
+    <article class="card" id="card"></article>
+  </main>
+</div>
+
+<script>
+// ==========================================================
+// ここに自分のソフトウェア情報を入力してください
+// thumbnail: 画像URL（省略すると絵文字アイコンを表示）
+// download: GitHub Releases 等のダウンロードURL
+// repo: GitHubリポジトリのURL
+// ==========================================================
+const softwareList = [
+  {
+    id: "thumb-viewer",
+    icon: "🖼️",
+    name: "提出物サムネイルビューア",
+    tag: "Apps Script",
+    tags: ["Google Apps Script", "Classroom連携"],
+    thumbnail: "",
+    description: "Google Classroomの提出物をサムネイル一覧で表示し、出席番号順に並び替え、A/B/C評価をその場で付けられるWebアプリです。採点作業の時間を大幅に短縮します。",
+    download: "https://github.com/your-account/thumb-viewer/releases",
+    repo: "https://github.com/your-account/thumb-viewer"
+  },
+  {
+    id: "unsubmitted-tracker",
+    icon: "📋",
+    name: "未提出物トラッカー",
+    tag: "Apps Script",
+    tags: ["Google Apps Script", "Classroom連携"],
+    thumbnail: "",
+    description: "クラス全体の課題提出状況を一覧で可視化し、未提出の児童を素早く確認できるツールです。複数クラス・複数課題をまとめて管理できます。",
+    download: "https://github.com/your-account/unsubmitted-tracker/releases",
+    repo: "https://github.com/your-account/unsubmitted-tracker"
+  },
+  {
+    id: "shuuan-generator",
+    icon: "📅",
+    name: "週案簿ジェネレーター",
+    tag: "Python / openpyxl",
+    tags: ["Python", "Excel自動生成"],
+    thumbnail: "",
+    description: "年間の週案簿（週ごとの授業計画）を自動生成するツールです。教科ドロップダウンや授業時数の自動集計、保護者向けサマリーシートまで一括で作成します。",
+    download: "https://github.com/your-account/shuuan-generator/releases",
+    repo: "https://github.com/your-account/shuuan-generator"
+  },
+  {
+    id: "video-compressor",
+    icon: "🎬",
+    name: "動画圧縮ツール",
+    tag: "Python / ffmpeg",
+    tags: ["Windows", "GUI/CLI両対応"],
+    thumbnail: "",
+    description: "授業で撮影した動画をffmpegで圧縮するデスクトップツールです。MTS/M2TS形式の自動判定やインターレース解除、進捗表示に対応しています。",
+    download: "https://github.com/your-account/video-compressor/releases",
+    repo: "https://github.com/your-account/video-compressor"
+  },
+  {
+    id: "worksheet-generator",
+    icon: "🧮",
+    name: "算数プリント生成AI",
+    tag: "React / AI",
+    tags: ["ブラウザ完結", "PDF印刷対応"],
+    thumbnail: "",
+    description: "学年・単元・難易度を選ぶだけでAIが算数の問題と解答を自動生成するWebアプリです。そのままPDFとして印刷できます。",
+    download: "https://github.com/your-account/worksheet-generator/releases",
+    repo: "https://github.com/your-account/worksheet-generator"
+  }
+];
+
+let activeId = softwareList[0].id;
+
+function renderList(){
+  const listEl = document.getElementById("soft-list");
+  listEl.innerHTML = "";
+  softwareList.forEach(sw => {
+    const li = document.createElement("li");
+    li.className = "soft-item" + (sw.id === activeId ? " active" : "");
+    li.innerHTML = `
+      <button type="button" data-id="${sw.id}">
+        ${sw.name}
+        <span class="tag">${sw.tag}</span>
+      </button>
+    `;
+    li.querySelector("button").addEventListener("click", () => {
+      activeId = sw.id;
+      renderList();
+      renderCard();
+    });
+    listEl.appendChild(li);
+  });
+}
+
+function renderCard(){
+  const sw = softwareList.find(s => s.id === activeId);
+  const cardEl = document.getElementById("card");
+  cardEl.innerHTML = `
+    <div class="thumb">
+      ${sw.thumbnail
+        ? `<img src="${sw.thumbnail}" alt="${sw.name}のサムネイル">`
+        : `<span class="fallback-icon">${sw.icon}</span>`}
+    </div>
+    <div class="card-body">
+      <p class="eyebrow">Software</p>
+      <h1 class="title">${sw.name}</h1>
+      <p class="desc">${sw.description}</p>
+      <div class="meta-tags">
+        ${sw.tags.map(t => `<span>${t}</span>`).join("")}
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" href="${sw.download}" target="_blank" rel="noopener">
+          ⬇ ダウンロード
+        </a>
+        <a class="btn btn-secondary" href="${sw.repo}" target="_blank" rel="noopener">
+          GitHubで見る
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+renderList();
+renderCard();
+</script>
+
+</body>
+</html>
