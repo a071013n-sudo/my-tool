@@ -262,7 +262,7 @@
 
 <div class="app">
   <aside class="sidebar">
-    <p class="sidebar-header">🌱 公開ソフトウェア</p>
+    <p class="sidebar-header">  公開ソフトウェア</p>
     <p class="sidebar-sub">github.com/your-account</p>
     <ul class="vine" id="soft-list"></ul>
   </aside>
@@ -280,60 +280,16 @@
 // repo: GitHubリポジトリのURL
 // ==========================================================
 const softwareList = [
-  {
-    id: "thumb-viewer",
-    icon: "🖼️",
-    name: "提出物サムネイルビューア",
-    tag: "Apps Script",
-    tags: ["Google Apps Script", "Classroom連携"],
-    thumbnail: "",
-    description: "Google Classroomの提出物をサムネイル一覧で表示し、出席番号順に並び替え、A/B/C評価をその場で付けられるWebアプリです。採点作業の時間を大幅に短縮します。",
-    download: "https://github.com/your-account/thumb-viewer/releases",
-    repo: "https://github.com/your-account/thumb-viewer"
-  },
-  {
-    id: "unsubmitted-tracker",
-    icon: "📋",
-    name: "未提出物トラッカー",
-    tag: "Apps Script",
-    tags: ["Google Apps Script", "Classroom連携"],
-    thumbnail: "",
-    description: "クラス全体の課題提出状況を一覧で可視化し、未提出の児童を素早く確認できるツールです。複数クラス・複数課題をまとめて管理できます。",
-    download: "https://github.com/your-account/unsubmitted-tracker/releases",
-    repo: "https://github.com/your-account/unsubmitted-tracker"
-  },
-  {
-    id: "shuuan-generator",
-    icon: "📅",
-    name: "週案簿ジェネレーター",
-    tag: "Python / openpyxl",
-    tags: ["Python", "Excel自動生成"],
-    thumbnail: "",
-    description: "年間の週案簿（週ごとの授業計画）を自動生成するツールです。教科ドロップダウンや授業時数の自動集計、保護者向けサマリーシートまで一括で作成します。",
-    download: "https://github.com/your-account/shuuan-generator/releases",
-    repo: "https://github.com/your-account/shuuan-generator"
-  },
-  {
-    id: "video-compressor",
-    icon: "🎬",
-    name: "動画圧縮ツール",
-    tag: "Python / ffmpeg",
-    tags: ["Windows", "GUI/CLI両対応"],
-    thumbnail: "",
-    description: "授業で撮影した動画をffmpegで圧縮するデスクトップツールです。MTS/M2TS形式の自動判定やインターレース解除、進捗表示に対応しています。",
-    download: "https://github.com/your-account/video-compressor/releases",
-    repo: "https://github.com/your-account/video-compressor"
-  },
-  {
-    id: "worksheet-generator",
-    icon: "🧮",
-    name: "算数プリント生成AI",
-    tag: "React / AI",
-    tags: ["ブラウザ完結", "PDF印刷対応"],
-    thumbnail: "",
-    description: "学年・単元・難易度を選ぶだけでAIが算数の問題と解答を自動生成するWebアプリです。そのままPDFとして印刷できます。",
-    download: "https://github.com/your-account/worksheet-generator/releases",
-    repo: "https://github.com/your-account/worksheet-generator"
+    {
+    id: "QRcode-maker",
+    icon: " ",
+    name: "オフラインQRコード作成",
+    tag: "",
+    tags: ["インストール不要", "校務PCで使える"],
+    thumbnail: "images\QRcodemaker.png",
+    description: "校務PCに送られてきてしまったURLをQRコードにできます。\nネットが使える端末のカメラで読み取れるようになります。",
+    download: "https://github.com/a071013n-sudo/my-tool/releases/download/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E4%B8%8D%E8%A6%81/QRcodemaker.html",
+    repo: "https://github.com/a071013n-sudo/my-tool"
   }
 ];
 
@@ -378,7 +334,7 @@ function renderCard(){
       </div>
       <div class="actions">
         <a class="btn btn-primary" href="${sw.download}" target="_blank" rel="noopener">
-          ⬇ ダウンロード
+          ? ダウンロード
         </a>
         <a class="btn btn-secondary" href="${sw.repo}" target="_blank" rel="noopener">
           GitHubで見る
