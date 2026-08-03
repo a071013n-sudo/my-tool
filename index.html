@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>小学校の校務PCで使えるソフト</title>
+<title>小学校の校務PCで、インストール不要で使えるソフト</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -293,13 +293,24 @@
 // ==========================================================
 const softwareList = [
   {
+    id: "task_cho",
+    icon: " ",
+    name: "タスク管理ソフト",
+    tag: "",
+    tags: ["インストール不要", "校務PCで使える"],
+    thumbnail: "images/task_cho.png",
+    description: "Windows標準の付箋ソフトが職員室で人気だったので、改良版を作成。\nドラッグアンドドロップでタスクを移動したり、繰り返しの設定ができます。\nとても便利。",
+    download: "https://github.com/a071013n-sudo/my-tool/releases/download/task_cho/task_cho.html",
+    repo: "https://github.com/a071013n-sudo/my-tool"
+  },
+  {
     id: "timetable_gene",
     icon: " ",
     name: "固定時間割ジェネレーター",
     tag: "",
     tags: ["インストール不要", "校務PCで使える"],
     thumbnail: "images/timetable_gene.png",
-    description: "担当になると年度初めの貴重な時間を吸い取られる固定時間割の案を、５秒くらいで考えてくれます。\nウリは、時間講師（〇曜日の午前中だけ、〇年〇組の授業を〇回担当する）も設定できることです。",
+    description: "担当になると年度初めの貴重な時間を吸い取られる固定時間割の案を、３秒くらいで考えてくれます。\nウリは、時間講師（〇曜日の午前中だけ、〇年〇組の授業を〇回担当する）も設定できることです。",
     download: "https://github.com/a071013n-sudo/my-tool/releases/download/timetable_gene/timetable_gene.html",
     repo: "https://github.com/a071013n-sudo/my-tool"
   },
