@@ -4,459 +4,952 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>小学校の校務PCで、インストール不要で使えるソフト</title>
+<meta name="description" content="小学校の校務PCで、インストール不要・オフラインで使えるソフトを公開しています。">
+<meta name="google-site-verification" content="OzULXzwhCWJlPun34dPf_hKiyEF97cI37XVQGoW3TTA" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#F2F7EE;
-    --sidebar-bg:#E7F0DF;
+    --bg-deep:#E7F0DF;
     --card-bg:#FFFFFF;
     --line:#CFE0C2;
+    --line-soft:#E2EDD8;
     --accent:#5B8C56;
     --accent-deep:#2F4B2C;
     --accent-soft:#A9CB9B;
+    --harvest:#B5820F;          /* 新着バッジ：実りの色 */
     --text:#28331F;
     --text-muted:#6E7C63;
-    --shadow: 0 8px 24px rgba(47,75,44,0.08);
-    --radius: 14px;
+    --shadow:0 6px 18px rgba(47,75,44,.07);
+    --shadow-lift:0 14px 30px rgba(47,75,44,.16);
+    --radius:14px;
+
+    /* フォントは学校ネットワークで Web フォントが遮断されても崩れないよう端末内蔵フォントを併記 */
+    --font-display:"Zen Maru Gothic","Hiragino Maru Gothic ProN","Yu Gothic Medium","メイリオ",sans-serif;
+    --font-body:"Noto Sans JP","Hiragino Sans","Yu Gothic","メイリオ",sans-serif;
+    --font-mono:"JetBrains Mono",SFMono-Regular,Consolas,"Courier New",monospace;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:var(--bg);
     color:var(--text);
-    font-family:"Noto Sans JP", sans-serif;
-    min-height:100vh;
+    font-family:var(--font-body);
+    line-height:1.7;
+    -webkit-text-size-adjust:100%;
   }
   a{color:inherit;}
 
-  /* ---------- Layout ---------- */
-  .app{
-    display:flex;
-    min-height:100vh;
+  /* ================= ヘッダー ================= */
+  .site-header{
+    background:var(--bg-deep);
+    border-bottom:1px solid var(--line);
+    padding:28px 24px 24px;
   }
-
-  /* ---------- Sidebar ---------- */
-  .sidebar{
-    width:280px;
-    flex-shrink:0;
-    background:var(--sidebar-bg);
-    border-right:1px solid var(--line);
-    padding:32px 0 32px 28px;
-    position:relative;
-  }
-  .sidebar-header{
-    font-family:"Zen Maru Gothic", sans-serif;
+  .header-inner{max-width:1120px;margin:0 auto;}
+  .site-title{
+    font-family:var(--font-display);
     font-weight:900;
-    font-size:1.15rem;
+    font-size:1.5rem;
     color:var(--accent-deep);
-    margin:0 0 4px 0;
+    margin:0;
     letter-spacing:.02em;
   }
-  .sidebar-sub{
-    font-family:"JetBrains Mono", monospace;
+  .site-lead{
+    margin:6px 0 0;
+    font-size:.9rem;
+    color:var(--text-muted);
+    max-width:44em;
+  }
+  .site-repo{
+    display:inline-block;
+    margin-top:10px;
+    font-family:var(--font-mono);
     font-size:.72rem;
     color:var(--text-muted);
-    margin:0 0 28px 0;
+    text-decoration:none;
+    border-bottom:1px dotted var(--accent-soft);
   }
+  .site-repo:hover{color:var(--accent-deep);}
 
-  .vine{
-    position:relative;
-    padding-left:26px;
+  /* ================= 安全性バンド ================= */
+  .trust{
+    background:var(--accent-deep);
+    color:#EAF3E5;
+    padding:16px 24px;
   }
-  .vine::before{
-    content:"";
-    position:absolute;
-    left:5px;
-    top:6px;
-    bottom:6px;
-    width:2px;
-    background:linear-gradient(to bottom, var(--accent-soft), var(--line) 90%);
-    border-radius:2px;
-  }
+  .trust-inner{max-width:1120px;margin:0 auto;}
 
-  .soft-item{
-    position:relative;
+  /* 要点は常に見え、説明は開閉できる。PCでは既定で開いた状態 */
+  .trust-summary{
     list-style:none;
-    margin:0 0 6px 0;
-  }
-  .soft-item::before{
-    /* leaf node */
-    content:"";
-    position:absolute;
-    left:-26px;
-    top:14px;
-    width:12px;
-    height:12px;
-    background:var(--card-bg);
-    border:2px solid var(--accent-soft);
-    border-radius:60% 60% 60% 0% / 60% 60% 40% 40%;
-    transform:rotate(45deg);
-    transition:all .25s ease;
-  }
-  .soft-item button{
-    all:unset;
-    display:block;
-    width:100%;
-    padding:10px 14px;
-    border-radius:10px;
     cursor:pointer;
-    font-family:"Noto Sans JP", sans-serif;
-    font-size:.92rem;
-    color:var(--text);
-    transition:background .2s ease, color .2s ease, transform .2s ease;
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    flex-wrap:wrap;
+    padding:2px 0;
+    border-radius:6px;
   }
-  .soft-item button:hover{
-    background:rgba(91,140,86,0.1);
-    transform:translateX(2px);
+  .trust-summary::-webkit-details-marker{display:none;}
+  .trust-summary:focus-visible{outline:2px solid var(--accent-soft);outline-offset:4px;}
+  .trust-headline{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:.98rem;
+    color:#fff;
+    margin:0;
   }
-  .soft-item button:focus-visible{
-    outline:2px solid var(--accent);
-    outline-offset:2px;
+  .trust-points{
+    font-size:.86rem;
+    color:#D3E5CA;
+    margin:0;
   }
-  .soft-item.active::before{
-    background:var(--accent);
-    border-color:var(--accent-deep);
-    box-shadow:0 0 0 4px rgba(91,140,86,0.18);
+  .trust-toggle{
+    font-size:.8rem;
+    color:var(--accent-soft);
+    border-bottom:1px dotted var(--accent-soft);
+    margin-left:auto;
+    white-space:nowrap;
   }
-  .soft-item.active button{
+  .trust-toggle::after{content:"くわしく";}
+  details[open] .trust-toggle::after{content:"閉じる";}
+
+  .trust-list{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:12px 22px;
+    list-style:none;
+    margin:14px 0 0;
+    padding:14px 0 0;
+    border-top:1px solid rgba(169,203,155,.3);
+  }
+  .trust-list li{
+    display:flex;gap:10px;align-items:flex-start;
+    font-size:.86rem;line-height:1.6;
+  }
+  .trust-list .mark{
+    flex-shrink:0;
+    width:20px;height:20px;
+    display:flex;align-items:center;justify-content:center;
     background:var(--accent-soft);
     color:var(--accent-deep);
-    font-weight:700;
+    border-radius:50%;
+    font-size:.72rem;font-weight:700;
+    margin-top:2px;
   }
-  .soft-item .tag{
-    display:block;
-    font-family:"JetBrains Mono", monospace;
-    font-size:.66rem;
-    color:var(--text-muted);
-    margin-top:1px;
+  .trust-list b{display:block;color:#fff;font-weight:700;}
+  .trust-list span.sub{color:#C9DDC0;font-size:.815rem;}
+  .trust-note{
+    margin:12px 0 0;
+    font-size:.815rem;
+    color:#C9DDC0;
   }
-  .soft-item.active .tag{ color:var(--accent-deep); opacity:.75; }
 
-  /* ---------- Main ---------- */
-  .main{
-    flex:1;
-    padding:48px 56px;
-    display:flex;
-    justify-content:center;
+  /* キーボード利用者がバンドを読み飛ばせるようにする */
+  .skip-link{
+    position:absolute;
+    left:-9999px;
+    top:0;
+    z-index:100;
+    background:#fff;
+    color:var(--accent-deep);
+    font-weight:700;
+    font-size:.9rem;
+    padding:10px 18px;
+    border:2px solid var(--accent-deep);
+    border-radius:0 0 8px 0;
   }
-  .card{
+  .skip-link:focus{left:0;}
+
+  /* ================= 絞り込みバー ================= */
+  .toolbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:rgba(242,247,238,.96);
+    border-bottom:1px solid var(--line);
+    padding:14px 24px;
+  }
+  .toolbar-inner{
+    max-width:1120px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .search-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .search-box{
+    position:relative;
+    flex:1 1 260px;
+    max-width:420px;
+  }
+  .search-box::before{
+    content:"🔍";
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:.85rem;
+    opacity:.55;
+    pointer-events:none;
+  }
+  #search{
     width:100%;
-    max-width:680px;
+    font-family:var(--font-body);
+    font-size:.92rem;
+    color:var(--text);
     background:var(--card-bg);
     border:1px solid var(--line);
+    border-radius:24px;
+    padding:9px 36px 9px 34px;
+  }
+  #search:focus{outline:2px solid var(--accent);outline-offset:1px;}
+  .search-clear{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:transparent;
+    color:var(--text-muted);
+    font-size:1.1rem;
+    line-height:1;
+    padding:4px 6px;
+    border-radius:50%;
+    cursor:pointer;
+    display:none;
+  }
+  .search-clear:hover{background:rgba(91,140,86,.12);color:var(--accent-deep);}
+  .result-count{
+    font-family:var(--font-mono);
+    font-size:.75rem;
+    color:var(--text-muted);
+    white-space:nowrap;
+  }
+  .result-count b{color:var(--accent-deep);font-size:.95rem;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;}
+  .chip{
+    font-family:var(--font-body);
+    font-size:.82rem;
+    background:var(--card-bg);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:5px 14px;
+    cursor:pointer;
+    transition:background .15s ease,border-color .15s ease,color .15s ease;
+  }
+  .chip:hover{background:rgba(91,140,86,.1);}
+  .chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .chip[aria-pressed="true"]{
+    background:var(--accent);
+    border-color:var(--accent-deep);
+    color:#fff;
+    font-weight:700;
+  }
+  .chip .count{
+    font-family:var(--font-mono);
+    font-size:.7rem;
+    opacity:.65;
+    margin-left:5px;
+  }
+
+  /* ================= 一覧グリッド ================= */
+  .main{max-width:1120px;margin:0 auto;padding:28px 24px 64px;}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+    gap:18px;
+    list-style:none;
+    margin:0;
+    padding:0;
+  }
+  .tool-card{
+    position:relative;
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-top:4px solid var(--cat-color,var(--accent));
     border-radius:var(--radius);
     box-shadow:var(--shadow);
-    overflow:hidden;
-    animation:rise .35s ease;
-  }
-  @keyframes rise{
-    from{opacity:0; transform:translateY(8px);}
-    to{opacity:1; transform:translateY(0);}
-  }
-  .thumb{
+    text-align:left;
     width:100%;
+    padding:18px 18px 16px;
+    font-family:var(--font-body);
+    color:var(--text);
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+  }
+  .tool-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift);}
+  .tool-card:focus-visible{outline:2px solid var(--accent-deep);outline-offset:3px;}
+
+  .card-top{display:flex;align-items:flex-start;gap:12px;}
+  .card-icon{
+    flex-shrink:0;
+    width:44px;height:44px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.4rem;
+    background:rgba(91,140,86,.12);
+    border:2px solid var(--accent-soft);
+    background:color-mix(in srgb,var(--cat-color,var(--accent)) 14%,#fff);
+    border:2px solid color-mix(in srgb,var(--cat-color,var(--accent)) 35%,#fff);
+    /* 葉のかたち：サイドバーの若葉モチーフを引き継ぐ */
+    border-radius:60% 60% 60% 6% / 60% 60% 40% 40%;
+  }
+  .card-name{
+    display:block;
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.02rem;
+    line-height:1.45;
+    color:var(--accent-deep);
+    margin:0;
+  }
+  .card-cat{
+    display:inline-block;
+    font-size:.72rem;
+    font-weight:500;
+    color:var(--cat-color,var(--accent));
+    margin-top:2px;
+  }
+  .card-summary{
+    margin:0;
+    font-size:.85rem;
+    line-height:1.75;
+    color:var(--text);
+    display:-webkit-box;
+    -webkit-line-clamp:3;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .safety-line{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px 8px;
+  }
+  .safety-line i{
+    font-style:normal;
+    font-size:.72rem;
+    line-height:1.5;
+    padding:2px 8px;
+    border-radius:4px;
+    white-space:nowrap;
+  }
+  .sf-ok{background:#E8F2E2;color:#33632F;border:1px solid #C4DDB9;}
+  .sf-note{background:#EFF1EC;color:#5C664F;border:1px solid #D9DED2;}
+  .sf-warn{background:#FBF0DA;color:#7A5510;border:1px solid #EBD5A4;}
+
+  .card-foot{
+    margin-top:auto;
+    padding-top:10px;
+    border-top:1px dashed var(--line-soft);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .card-env{
+    font-size:.74rem;
+    color:var(--text-muted);
+  }
+  .card-updated{
+    font-family:var(--font-mono);
+    font-size:.68rem;
+    color:var(--text-muted);
+  }
+  .badge-new{
+    position:absolute;
+    top:-9px;right:12px;
+    background:var(--harvest);
+    color:#fff;
+    font-family:var(--font-mono);
+    font-size:.62rem;
+    font-weight:600;
+    letter-spacing:.06em;
+    padding:2px 8px;
+    border-radius:10px;
+  }
+
+  .load-error{
+    border:1px solid #E4C7A0;
+    background:#FCF6EA;
+    border-radius:var(--radius);
+    padding:24px 26px;
+    margin-bottom:20px;
+    font-size:.9rem;
+    line-height:1.8;
+  }
+  .load-error p{margin:0 0 6px;}
+  .load-error p:last-child{margin:0;color:var(--text-muted);font-size:.84rem;}
+
+  .empty{
+    text-align:center;
+    padding:56px 20px;
+    color:var(--text-muted);
+    border:1px dashed var(--line);
+    border-radius:var(--radius);
+    background:rgba(255,255,255,.5);
+  }
+  .empty p{margin:0 0 14px;}
+  .empty button{
+    font-family:var(--font-body);
+    font-size:.85rem;
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:8px 18px;
+    cursor:pointer;
+  }
+
+  /* ================= 詳細モーダル ================= */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(40,51,31,.5);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:32px 20px;
+    overflow-y:auto;
+    z-index:50;
+  }
+  .overlay.open{display:flex;}
+  .modal{
+    width:100%;
+    max-width:620px;
+    background:var(--card-bg);
+    border-radius:var(--radius);
+    box-shadow:0 20px 50px rgba(20,35,15,.35);
+    overflow:hidden;
+    animation:rise .25s ease;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+  .modal-thumb{
     aspect-ratio:16/9;
     background:
       repeating-linear-gradient(135deg,
-        rgba(91,140,86,0.06) 0px, rgba(91,140,86,0.06) 10px,
-        transparent 10px, transparent 20px),
+        rgba(255,255,255,.35) 0 10px, transparent 10px 20px),
       var(--accent-soft);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-    overflow:hidden;
+    background:
+      repeating-linear-gradient(135deg,
+        rgba(255,255,255,.35) 0 10px, transparent 10px 20px),
+      color-mix(in srgb,var(--cat-color,var(--accent)) 30%,#fff);
+    display:flex;align-items:center;justify-content:center;
     padding:16px;
   }
-  .thumb img{
-    max-width:100%;
-    max-height:100%;
-    width:auto;
-    height:auto;
-    object-fit:contain;
-    border-radius:6px;
-    box-shadow:0 4px 14px rgba(47,75,44,0.15);
+  .modal-thumb img{max-width:100%;max-height:100%;border-radius:6px;box-shadow:0 4px 14px rgba(47,75,44,.18);}
+  .modal-thumb .big-icon{font-size:3.4rem;}
+  .modal-body{padding:24px 28px 28px;}
+  .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;}
+  .modal-cat{
+    font-size:.75rem;
+    font-weight:700;
+    color:var(--cat-color,var(--accent));
+    margin:0 0 4px;
   }
-  .thumb .fallback-icon{
-    font-size:3rem;
-  }
-  .card-body{ padding:28px 32px 32px; }
-  .eyebrow{
-    font-family:"JetBrains Mono", monospace;
-    font-size:.72rem;
-    color:var(--accent);
-    text-transform:uppercase;
-    letter-spacing:.08em;
-    margin:0 0 8px 0;
-  }
-  h1.title{
-    font-family:"Zen Maru Gothic", sans-serif;
+  .modal-title{
+    font-family:var(--font-display);
     font-weight:900;
-    font-size:1.6rem;
+    font-size:1.4rem;
+    line-height:1.45;
     color:var(--accent-deep);
-    margin:0 0 12px 0;
-    line-height:1.4;
+    margin:0;
   }
-  .desc{
-    font-size:.95rem;
-    line-height:1.9;
-    color:var(--text);
-    margin:0 0 22px 0;
+  .modal-close{
+    flex-shrink:0;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--text-muted);
+    width:34px;height:34px;
+    border-radius:50%;
+    font-size:1.1rem;
+    line-height:1;
+    cursor:pointer;
+  }
+  .modal-close:hover{background:rgba(91,140,86,.1);color:var(--accent-deep);}
+  .modal-close:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .modal-desc{
+    font-size:.92rem;
+    line-height:1.95;
+    margin:16px 0 20px;
     white-space:pre-line;
   }
-  .meta-tags{
-    display:flex;
-    flex-wrap:wrap;
-    gap:8px;
-    margin-bottom:24px;
+  .safety-box{
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    margin:0 0 16px;
+    background:#F6FAF3;
   }
-  .meta-tags span{
-    font-family:"JetBrains Mono", monospace;
-    font-size:.72rem;
-    background:rgba(91,140,86,0.1);
+  .safety-box h3{
+    font-family:var(--font-display);
+    font-size:.86rem;
     color:var(--accent-deep);
-    padding:4px 10px;
+    margin:0 0 10px;
+  }
+  .safety-box dl{margin:0;font-size:.84rem;}
+  .safety-box dl > div{
+    display:flex;gap:12px;
+    padding:6px 0;
+    border-top:1px solid var(--line-soft);
+  }
+  .safety-box dl > div:first-child{border-top:none;}
+  .safety-box dt{flex:0 0 7em;color:var(--text-muted);margin:0;}
+  .safety-box dd{margin:0;flex:1;line-height:1.6;}
+  .safety-box dd .lv{font-weight:700;}
+  .lv-ok{color:#33632F;}
+  .lv-note{color:#5C664F;}
+  .lv-warn{color:#7A5510;}
+
+  .spec{
+    border:1px solid var(--line-soft);
+    border-radius:10px;
+    background:#FAFCF8;
+    padding:12px 16px;
+    margin:0 0 18px;
+    font-size:.84rem;
+  }
+  .spec div{display:flex;gap:10px;padding:3px 0;}
+  .spec dt{flex:0 0 5.5em;color:var(--text-muted);margin:0;}
+  .spec dd{margin:0;flex:1;}
+  .meta-tags{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 20px;}
+  .meta-tags span{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    background:rgba(91,140,86,.1);
+    color:var(--accent-deep);
+    padding:3px 10px;
     border-radius:20px;
     border:1px solid var(--accent-soft);
   }
-  .actions{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-  }
+  .actions{display:flex;gap:12px;flex-wrap:wrap;}
   .btn{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:12px 20px;
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 20px;
     border-radius:10px;
-    font-weight:700;
-    font-size:.9rem;
-    text-decoration:none;
-    transition:transform .15s ease, box-shadow .15s ease;
-    cursor:pointer;
+    font-family:var(--font-body);
+    font-weight:700;font-size:.9rem;
+    text-decoration:none;cursor:pointer;
     border:1px solid transparent;
+    transition:transform .15s ease,box-shadow .15s ease,background .15s ease;
   }
-  .btn:focus-visible{ outline:2px solid var(--accent-deep); outline-offset:2px; }
-  .btn-primary{
-    background:var(--accent);
-    color:#fff;
+  .btn:focus-visible{outline:2px solid var(--accent-deep);outline-offset:2px;}
+  .btn-primary{background:var(--accent);color:#fff;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(91,140,86,.35);}
+  .btn-secondary{background:transparent;color:var(--accent-deep);border-color:var(--line);}
+  .btn-secondary:hover{background:rgba(91,140,86,.08);}
+
+  /* ================= フッター ================= */
+  .site-footer{
+    border-top:1px solid var(--line);
+    background:var(--bg-deep);
+    padding:24px;
   }
-  .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 6px 16px rgba(91,140,86,.35); }
-  .btn-secondary{
-    background:transparent;
+  .footer-inner{
+    max-width:1120px;margin:0 auto;
+    font-size:.78rem;color:var(--text-muted);
+  }
+  .footer-inner p{margin:0 0 6px;}
+  .flyer-box{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 20px;
+    margin-bottom:18px;
+  }
+  .flyer-title{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:.95rem;
     color:var(--accent-deep);
-    border-color:var(--line);
+    margin:0 0 4px !important;
   }
-  .btn-secondary:hover{ background:rgba(91,140,86,0.08); }
+  .flyer-sub{margin:0 !important;font-size:.8rem;}
 
-  @media (prefers-reduced-motion: reduce){
-    .card{animation:none;}
-    .btn:hover, .soft-item button:hover{transform:none;}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+    .tool-card:hover,.btn:hover{transform:none;}
   }
 
-  /* ---------- Responsive ---------- */
-  @media (max-width: 760px){
-    .app{flex-direction:column;}
-    .sidebar{
-      width:100%;
-      border-right:none;
-      border-bottom:1px solid var(--line);
-      padding:24px 20px;
+  @media (max-width:640px){
+    .trust{padding:14px 18px;}
+    .trust-summary{padding:6px 0;}
+    .trust-toggle{
+      margin-left:0;
+      padding:8px 0;          /* 指で押しやすい高さを確保 */
+      display:inline-block;
     }
-    .main{padding:28px 20px;}
+    .site-header{padding:22px 18px 18px;}
+    .site-title{font-size:1.25rem;}
+    .toolbar{padding:12px 18px;}
+    .main{padding:22px 18px 48px;}
+    .grid{grid-template-columns:1fr;gap:14px;}
+    .modal-body{padding:20px;}
+    .overlay{padding:16px 12px;}
+  }
+
+  /* 一覧を印刷して配る場合 */
+  @media print{
+    .toolbar,.overlay,.site-footer{display:none !important;}
+    body{background:#fff;}
+    .grid{grid-template-columns:1fr 1fr;gap:10px;}
+    .tool-card{box-shadow:none;break-inside:avoid;}
+    .card-summary{-webkit-line-clamp:unset;overflow:visible;}
   }
 </style>
-<meta name="google-site-verification" content="OzULXzwhCWJlPun34dPf_hKiyEF97cI37XVQGoW3TTA" />
 </head>
 <body>
 
-<div class="app">
-  <aside class="sidebar">
-    <p class="sidebar-header">  小学校の校務PCで使えます</p>
-    <p class="sidebar-sub">インストール不要で、オフラインで使えます</p>
-    <ul class="vine" id="soft-list"></ul>
-  </aside>
+<a class="skip-link" href="#tools">道具の一覧へ移動</a>
 
-  <main class="main">
-    <article class="card" id="card"></article>
-  </main>
+<header class="site-header">
+  <div class="header-inner">
+    <h1 class="site-title" id="site-title">🌱 せんせいの道具箱</h1>
+    <p class="site-lead" id="site-lead"></p>
+    <a class="site-repo" id="site-repo" href="#" target="_blank" rel="noopener"></a>
+  </div>
+</header>
+
+<section class="trust" aria-labelledby="trust-title">
+  <div class="trust-inner">
+    <details id="trust-details" open>
+    <summary class="trust-summary">
+      <h2 class="trust-headline" id="trust-title">安心して使っていただくために</h2>
+      <p class="trust-points" id="trust-points"></p>
+      <span class="trust-toggle" aria-hidden="true"></span>
+    </summary>
+    <ul class="trust-list" id="trust-list"></ul>
+    <p class="trust-note">
+      HTML形式のものは、メモ帳で開けば中身をそのまま確認できます。導入・ログイン・データの行き先は各カードに明記しています。
+    </p>
+    </details>
+  </div>
+</section>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search-row">
+      <div class="search-box">
+        <label class="visually-hidden" for="search" style="position:absolute;left:-9999px;">ツールを探す</label>
+        <input type="search" id="search" placeholder="名前・機能・キーワードで探す" autocomplete="off">
+        <button class="search-clear" id="search-clear" type="button" aria-label="検索条件を消す">×</button>
+      </div>
+      <p class="result-count" id="result-count"></p>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="種類でしぼり込む"></div>
+  </div>
 </div>
 
+<main class="main" id="tools" tabindex="-1">
+  <div class="load-error" id="load-error" hidden>
+    <p><b>ツール情報を読み込めませんでした。</b></p>
+    <p>tools.js が見つからないか、書き方に誤りがあるようです。少し時間をおいて再読み込みしてください。</p>
+  </div>
+  <ul class="grid" id="grid"></ul>
+  <div class="empty" id="empty" hidden>
+    <p>条件に合う道具は見つかりませんでした。<br>キーワードを短くするか、種類を「すべて」に戻してみてください。</p>
+    <button type="button" id="reset">条件をリセットする</button>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="flyer-box">
+      <div>
+        <p class="flyer-title">職員室で紹介してくださる方へ</p>
+        <p class="flyer-sub">A4・1枚の紹介チラシです。印刷して回覧・掲示にお使いください。</p>
+      </div>
+      <a class="btn btn-primary" href="flyer.pdf" target="_blank" rel="noopener">⬇ チラシ（PDF）</a>
+    </div>
+    <p>各ツールは勤務校での利用を想定して個人で作成したものです。ご自身の環境で動作を確認のうえご利用ください。</p>
+    <p>不具合・要望は GitHub の Issue へお寄せください。</p>
+  </div>
+</footer>
+
+<!-- 詳細モーダル -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal" id="modal"></div>
+</div>
+
+<script src="tools.js"></script>
 <script>
-// ==========================================================
-// ここに自分のソフトウェア情報を入力してください
-// thumbnail: 画像URL（省略すると絵文字アイコンを表示）
-// download: GitHub Releases 等のダウンロードURL
-// repo: GitHubリポジトリのURL
-// ==========================================================
-const softwareList = [
-  {
-    id: "task_cho",
-    icon: " ",
-    name: "タスク管理ソフト",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/task_cho.png",
-    description: "Windows標準の付箋ソフトが職員室で人気だったので、改良版を作成。\nドラッグアンドドロップでタスクを移動したり、繰り返しの設定ができます。\nとても便利。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/task_cho/task-cho.html",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
-  {
-    id: "timetable_gene",
-    icon: " ",
-    name: "固定時間割ジェネレーター",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/timetable_gene.png",
-    description: "担当になると年度初めの貴重な時間を吸い取られる固定時間割の案を、３秒くらいで考えてくれます。\nウリは、時間講師（〇曜日の午前中だけ、〇年〇組の授業を〇回担当する）も設定できることです。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/timetable_gene/timetable_gene.html",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
-  {
-    id: "club_assign",
-    icon: " ",
-    name: "クラブ希望調査調整ツール",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/club_assign.png",
-    description: "担当になってしまうと年度末すっごい大変なクラブの希望調査の調整が、３秒くらいで終わります。\nFormsなどで希望調査を取ると、更に楽です。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/club_assign/club-assign.html",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
-  {
-    id: "QRcode-maker",
-    icon: " ",
-    name: "オフラインQRコード作成",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/QRcodemaker.png",
-    description: "校務PCに送られてきてしまったURLをQRコードにできます。\nネットが使える端末のカメラで読み取れるようになります。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E4%B8%8D%E8%A6%81/QRcodemaker.html",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
- {
-    id: "hyoki_kensaku",
-    icon: " ",
-    name: "表記便覧　検索ソフト",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/hyoki_kensaku.png",
-    description: "表記便覧をパラパラめくらなくてよくなります。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/%E8%A1%A8%E8%A8%98%E4%BE%BF%E8%A6%A7/kyoki_kensaku.html",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
- {
-    id: "hyoki_syusei",
-    icon: " ",
-    name: "表記便覧に合わせてExcelやWordを自動で修正",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/hyoki_syusei.png",
-    description: "よく考えたら所見はみなさんExcelで書いていたことに気付いたので、自動で修正できるものを作成しました。\nこのファイル上でのみ動作するので、情報は外部に漏れません。\n組織で簡単に表記を統一できます。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/1/hyoki_syusei.html",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
- {
-    id: "pic_compress",
-    icon: " ",
-    name: "画像圧縮ソフト",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/pic_compress.png",
-    description: "「共有フォルダがもういっぱいで、真っ赤！」ってときに使ってください。\n１BM以上の画像ファイルを５００ＫＢ程度まで圧縮します。\n圧縮し過ぎを防ぐために、１ＭＢ以下のファイルは処理をスキップします。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/pic_compress/pic_compress.exe",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
- {
-    id: "mov_compress",
-    icon: " ",
-    name: "動画圧縮ソフト",
-    tag: "",
-    tags: ["インストール不要", "校務PCで使える"],
-    thumbnail: "images/mov_compress.png",
-    description: "行事の記録ビデオサイズ大きすぎる問題を解決できます。\n「共有フォルダがもういっぱいで、真っ赤！」ってときにも使ってください。\n動画ファイルをPC画面で見る分には支障ないサイズまで圧縮します。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/mov_compress/mov_compress.exe",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
-  {
-    id: "gakugeikai_index",
-    icon: " ",
-    name: "学芸会の脚本インデックス",
-    tag: "",
-    tags: ["インストール不要"],
-    thumbnail: "images/gakugeikai_index.png",
-    description: "意外と探すのが大変な、学芸会に使っていい脚本のインデックス。\nここから生成AIと脚本を考えると楽です。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/gakugeikai_index/gakugeikai_index.exe",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  },
-  {
-    id: "waveform_editor",
-    icon: " ",
-    name: "音楽データ波形編集ソフト",
-    tag: "",
-    tags: ["インストール不要","校務PCで使える"],
-    thumbnail: "images/waveform_editor.png",
-    description: "運動会や学芸会の音響編集に必要な機能だけにしました。\nMP3で出力をします。",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/waveform_editor/waveform_editor.exe",
-    repo: "https://github.com/a071013n-sudo/my-tool"
-  }
+/* --------------------------------------------------------
+   掲載データは tools.js にあります。編集はそちらで。
+   このファイル（index.html）は表示の仕組みだけを持ちます。
+   -------------------------------------------------------- */
+
+const categoryColor = window.CATEGORY_COLOR || { "その他": "#7A7F6B" };
+const softwareList  = Array.isArray(window.TOOLS) ? window.TOOLS : [];
+const site          = window.SITE || {};
+const trustItems    = Array.isArray(window.TRUST) ? window.TRUST : [];
+
+/* ========== ここから下は編集不要 ========== */
+
+const $ = id => document.getElementById(id);
+const gridEl = $("grid"), emptyEl = $("empty"), chipsEl = $("chips");
+const searchEl = $("search"), clearEl = $("search-clear"), countEl = $("result-count");
+const overlayEl = $("overlay"), modalEl = $("modal");
+
+let activeCategory = "すべて";
+let keyword = "";
+let lastFocused = null;
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c =>
+  ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+
+const colorOf = sw => categoryColor[sw.category] || categoryColor["その他"] || "#5B8C56";
+const summaryOf = sw => sw.summary || sw.description || "";
+
+// URLに #tool=id を反映する。プレビュー枠(about:srcdoc)など
+// history API が使えない環境では黙って何もしない
+function setHash(hash){
+  try{
+    history.replaceState(null, "", hash || (location.pathname + location.search));
+  }catch(e){ /* この環境では直リンク共有は使えないだけ。表示には影響しない */ }
+}
+
+// 更新が新しい上位2件を NEW 扱いにする
+const newIds = new Set(
+  [...softwareList]
+    .filter(s => s.updated)
+    .sort((a, b) => String(b.updated).localeCompare(String(a.updated)))
+    .slice(0, 2)
+    .map(s => s.id)
+);
+
+const SAFETY_KEYS = [
+  ["install", "導入"],
+  ["login",   "ログイン"],
+  ["data",    "データの行き先"]
 ];
 
-let activeId = softwareList[0].id;
+// カード用：短い安全性チップ
+function safetyChips(sw){
+  if (!sw.safety) return "";
+  return SAFETY_KEYS.map(([k]) => {
+    const v = sw.safety[k];
+    if (!v || !v.s) return "";
+    const cls = v.lv === "warn" ? "sf-warn" : v.lv === "note" ? "sf-note" : "sf-ok";
+    const mark = v.lv === "ok" ? "✓ " : "";
+    return `<i class="${cls}">${mark}${esc(v.s)}</i>`;
+  }).join("");
+}
 
-function renderList(){
-  const listEl = document.getElementById("soft-list");
-  listEl.innerHTML = "";
-  softwareList.forEach(sw => {
-    const li = document.createElement("li");
-    li.className = "soft-item" + (sw.id === activeId ? " active" : "");
-    li.innerHTML = `
-      <button type="button" data-id="${sw.id}">
-        ${sw.name}
-        <span class="tag">${sw.tag}</span>
-      </button>
-    `;
-    li.querySelector("button").addEventListener("click", () => {
-      activeId = sw.id;
-      renderList();
-      renderCard();
+// 詳細用：3項目の表
+function safetyBox(sw){
+  if (!sw.safety) return "";
+  const rows = SAFETY_KEYS.map(([k, label]) => {
+    const v = sw.safety[k];
+    if (!v) return "";
+    const cls = v.lv === "warn" ? "lv-warn" : v.lv === "note" ? "lv-note" : "lv-ok";
+    return `<div><dt>${esc(label)}</dt><dd>
+        <span class="lv ${cls}">${esc(v.s)}</span><br>${esc(v.d || "")}
+      </dd></div>`;
+  }).join("");
+  return `<section class="safety-box">
+      <h3>このツールの安全性</h3>
+      <dl>${rows}</dl>
+    </section>`;
+}
+
+// 安全性の文言も検索対象に含める
+function safetyText(sw){
+  if (!sw.safety) return "";
+  return SAFETY_KEYS.map(([k]) => {
+    const v = sw.safety[k] || {};
+    return (v.s || "") + " " + (v.d || "");
+  }).join(" ");
+}
+
+function matches(sw){
+  if (activeCategory !== "すべて" && sw.category !== activeCategory) return false;
+  if (!keyword) return true;
+  const hay = [sw.name, sw.category, sw.env, summaryOf(sw), sw.description,
+               safetyText(sw), ...(sw.tags || [])]
+    .join(" ").toLowerCase();
+  return keyword.toLowerCase().split(/\s+/).filter(Boolean).every(w => hay.includes(w));
+}
+
+function renderChips(){
+  // 並び順は categoryColor の定義順。定義にない種類は末尾に回す
+  const used = new Set(softwareList.map(s => s.category || "その他"));
+  const known = Object.keys(categoryColor).filter(c => used.has(c));
+  const extra = [...used].filter(c => !(c in categoryColor));
+  const cats = ["すべて", ...known, ...extra];
+  chipsEl.innerHTML = cats.map(c => {
+    const n = c === "すべて" ? softwareList.length
+                             : softwareList.filter(s => (s.category || "その他") === c).length;
+    return `<button type="button" class="chip" data-cat="${esc(c)}"
+              aria-pressed="${c === activeCategory}">${esc(c)}<span class="count">${n}</span></button>`;
+  }).join("");
+  chipsEl.querySelectorAll(".chip").forEach(b => {
+    b.addEventListener("click", () => {
+      activeCategory = b.dataset.cat;
+      renderChips();
+      renderGrid();
     });
-    listEl.appendChild(li);
   });
 }
 
-function renderCard(){
-  const sw = softwareList.find(s => s.id === activeId);
-  const cardEl = document.getElementById("card");
-  cardEl.innerHTML = `
-    <div class="thumb">
+function renderGrid(){
+  const list = softwareList.filter(matches);
+  countEl.innerHTML = `<b>${list.length}</b> / ${softwareList.length} 件`;
+  clearEl.style.display = keyword ? "block" : "none";
+  emptyEl.hidden = list.length > 0;
+
+  gridEl.innerHTML = list.map(sw => `
+    <li>
+      <button type="button" class="tool-card" data-id="${esc(sw.id)}"
+              style="--cat-color:${colorOf(sw)}">
+        ${newIds.has(sw.id) ? '<span class="badge-new">NEW</span>' : ""}
+        <span class="card-top">
+          <span class="card-icon" aria-hidden="true">${sw.icon || "🌱"}</span>
+          <span>
+            <span class="card-name">${esc(sw.name)}</span>
+            <span class="card-cat">${esc(sw.category || "その他")}</span>
+          </span>
+        </span>
+        <span class="card-summary">${esc(summaryOf(sw))}</span>
+        <span class="safety-line">${safetyChips(sw)}</span>
+        <span class="card-foot">
+          <span class="card-env">${sw.env ? "必要：" + esc(sw.env) : ""}</span>
+          <span class="card-updated">${sw.updated ? esc(sw.updated) : ""}</span>
+        </span>
+      </button>
+    </li>
+  `).join("");
+
+  gridEl.querySelectorAll(".tool-card").forEach(b => {
+    b.addEventListener("click", () => openModal(b.dataset.id));
+  });
+}
+
+function openModal(id){
+  const sw = softwareList.find(s => s.id === id);
+  if (!sw) return;
+  lastFocused = document.activeElement;
+
+  modalEl.style.setProperty("--cat-color", colorOf(sw));
+  modalEl.innerHTML = `
+    <div class="modal-thumb">
       ${sw.thumbnail
-        ? `<img src="${sw.thumbnail}" alt="${sw.name}のサムネイル">`
-        : `<span class="fallback-icon">${sw.icon}</span>`}
+        ? `<img src="${esc(sw.thumbnail)}" alt="${esc(sw.name)}の画面例">`
+        : `<span class="big-icon" aria-hidden="true">${sw.icon || "🌱"}</span>`}
     </div>
-    <div class="card-body">
-      <p class="eyebrow">Software</p>
-      <h1 class="title">${sw.name}</h1>
-      <p class="desc">${sw.description}</p>
-      <div class="meta-tags">
-        ${sw.tags.map(t => `<span>${t}</span>`).join("")}
+    <div class="modal-body">
+      <div class="modal-head">
+        <div>
+          <p class="modal-cat">${esc(sw.category || "その他")}</p>
+          <h2 class="modal-title" id="modal-title">${esc(sw.name)}</h2>
+        </div>
+        <button type="button" class="modal-close" id="modal-close" aria-label="閉じる">×</button>
       </div>
+      <p class="modal-desc">${esc(sw.description || summaryOf(sw))}</p>
+      ${safetyBox(sw)}
+      <dl class="spec">
+        ${sw.env ? `<div><dt>必要なもの</dt><dd>${esc(sw.env)}</dd></div>` : ""}
+        ${sw.updated ? `<div><dt>最終更新</dt><dd>${esc(sw.updated)}</dd></div>` : ""}
+      </dl>
+      ${(sw.tags || []).length
+        ? `<div class="meta-tags">${sw.tags.map(t => `<span>${esc(t)}</span>`).join("")}</div>`
+        : ""}
       <div class="actions">
-        <a class="btn btn-primary" href="${sw.download}" target="_blank" rel="noopener">
-          ? ダウンロード
-        </a>
-        <a class="btn btn-secondary" href="${sw.repo}" target="_blank" rel="noopener">
-          GitHubで見る
-        </a>
+        <a class="btn btn-primary" href="${esc(sw.download)}" target="_blank" rel="noopener">⬇ ダウンロード</a>
+        <a class="btn btn-secondary" href="${esc(sw.repo)}" target="_blank" rel="noopener">GitHubで見る</a>
       </div>
     </div>
   `;
+  overlayEl.classList.add("open");
+  document.body.style.overflow = "hidden";
+  setHash("#tool=" + sw.id);
+  $("modal-close").addEventListener("click", closeModal);
+  $("modal-close").focus();
 }
 
-renderList();
-renderCard();
+function closeModal(){
+  overlayEl.classList.remove("open");
+  document.body.style.overflow = "";
+  setHash("");
+  if (lastFocused) lastFocused.focus();
+}
+
+overlayEl.addEventListener("click", e => { if (e.target === overlayEl) closeModal(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && overlayEl.classList.contains("open")) closeModal();
+});
+
+searchEl.addEventListener("input", () => { keyword = searchEl.value.trim(); renderGrid(); });
+clearEl.addEventListener("click", () => {
+  searchEl.value = ""; keyword = ""; renderGrid(); searchEl.focus();
+});
+$("reset").addEventListener("click", () => {
+  searchEl.value = ""; keyword = ""; activeCategory = "すべて";
+  renderChips(); renderGrid(); searchEl.focus();
+});
+
+// ---- tools.js の内容を画面に反映 ----
+function applySite(){
+  if (site.name) $("site-title").textContent = "🌱 " + site.name;
+  $("trust-points").textContent = trustItems.map(([t]) => t).join("・");
+  $("trust-list").innerHTML = trustItems.map(([title, sub]) => `
+      <li>
+        <span class="mark" aria-hidden="true">✓</span>
+        <span><b>${esc(title)}</b><span class="sub">${esc(sub)}</span></span>
+      </li>`).join("");
+  const lead = [site.lead, site.lead2].filter(Boolean);
+  $("site-lead").innerHTML = lead.map(esc).join("<br>");
+  const repo = $("site-repo");
+  if (site.repo){
+    repo.href = site.repo;
+    repo.textContent = site.repo.replace(/^https?:\/\//, "");
+  } else {
+    repo.hidden = true;
+  }
+}
+
+// tools.js が読めていない／空のときは、白紙にせず理由を出す
+function checkLoaded(){
+  const failed = !Array.isArray(window.TOOLS) || window.TOOLS.length === 0;
+  $("load-error").hidden = !failed;
+  if (failed){
+    document.querySelector(".toolbar").hidden = true;
+    $("empty").hidden = true;
+  }
+  return !failed;
+}
+
+// 狭い画面では説明をたたんで、道具の一覧をすぐ見せる（内容はいつでも開ける）
+(function(){
+  const d = $("trust-details");
+  const mq = window.matchMedia("(min-width: 760px)");
+  const apply = () => { d.open = mq.matches; };
+  apply();
+  if (mq.addEventListener) mq.addEventListener("change", apply);
+})();
+
+applySite();
+if (checkLoaded()){
+  renderChips();
+  renderGrid();
+}
+
+// #tool=id 付きのURLで開かれたら、その詳細を直接表示（同僚への共有用）
+try{
+  const m = location.hash.match(/^#tool=(.+)$/);
+  if (m) openModal(decodeURIComponent(m[1]));
+}catch(e){ /* 無視 */ }
 </script>
 
 </body>
