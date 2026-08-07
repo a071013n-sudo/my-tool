@@ -14,7 +14,7 @@ window.SITE = {
   lead:      "インストール不要で、オフラインで使えます。",
   lead2:     "校務PCでそのまま動くものを集めました。",
   url:       "https://a071013n-sudo.github.io/my-tool/",
-  repo:      "https://github.com/a071013n-sudo/my-tool",
+  repo:      "",
   flyerNote: "作成：現職の小学校教員　／　ご自由に印刷・回覧してください"
 };
 
