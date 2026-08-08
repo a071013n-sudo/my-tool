@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>運動会・表現運動インデックス｜持ち時間10分の設計</title>
+<style>
+:root{
+  --paper:#EFEAD8;
+  --paper-hi:#FAF7EC;
+  --sumi:#1F1C19;
+  --sumi-soft:#5B554C;
+  --aka:#C0362C;
+  --aka-soft:#E8C6C1;
+  --ao:#2C5F87;
+  --ao-soft:#C6D6E1;
+  --rule:#CFC7AE;
+  --lime:#FFFFFF;
+  --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho","MS PMincho","Noto Serif JP",serif;
+  --gothic:"Hiragino Kaku Gothic ProN","Yu Gothic","YuGothic","Meiryo","Noto Sans JP",sans-serif;
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--sumi);
+  font-family:var(--gothic);
+  font-size:15px;
+  line-height:1.75;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px 72px;}
+
+/* ── 万国旗 ─────────────────────── */
+.bunting{
+  display:flex;align-items:flex-start;gap:0;
+  height:26px;margin:0 -18px 0;padding:0 18px;
+  border-bottom:1px solid var(--rule);
+  overflow:hidden;
+}
+.bunting i{
+  display:block;flex:1 1 auto;height:15px;
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  opacity:.85;
+}
+.bunting i:nth-child(6n+1){background:var(--aka);}
+.bunting i:nth-child(6n+2){background:var(--ao);}
+.bunting i:nth-child(6n+3){background:#D9A227;}
+.bunting i:nth-child(6n+4){background:#4C7A4A;}
+.bunting i:nth-child(6n+5){background:#8C5A8E;}
+.bunting i:nth-child(6n+6){background:#D97A2B;}
+.bunting i:nth-child(2n){height:12px;}
+
+/* ── 表紙 ───────────────────────── */
+header{padding:34px 0 24px;border-bottom:3px double var(--aka);margin-bottom:4px;}
+.eyebrow{font-size:11px;letter-spacing:.34em;color:var(--aka);margin:0 0 14px;font-weight:700;}
+.eyebrow a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(192,54,44,.4);}
+h1{
+  font-family:var(--mincho);
+  font-size:clamp(28px,6.2vw,48px);
+  font-weight:600;letter-spacing:.06em;margin:0 0 8px;line-height:1.25;
+}
+.sub{font-family:var(--mincho);font-size:clamp(14px,2.6vw,17px);color:var(--sumi-soft);margin:0 0 22px;letter-spacing:.06em;}
+.lede{max-width:62ch;font-size:13.5px;color:#4A463F;margin:0 0 18px;}
+.lede strong{color:var(--aka);}
+
+/* ── 10分の内訳（ヒーロー） ───────── */
+.budget{
+  background:var(--paper-hi);border:1px solid var(--rule);
+  padding:16px 18px 14px;max-width:640px;
+}
+.budget h2{font-family:var(--mincho);font-size:15px;margin:0 0 12px;letter-spacing:.08em;font-weight:600;}
+.budget .note{font-size:12px;color:var(--sumi-soft);margin:10px 0 0;}
+
+/* 時間帯グラフ（共通） */
+.tl{
+  position:relative;display:flex;height:20px;width:100%;
+  background:
+    repeating-linear-gradient(to right,transparent 0,transparent calc(10% - 1px),var(--rule) calc(10% - 1px),var(--rule) 10%),
+    var(--lime);
+  border:1px solid var(--sumi);
+}
+.tl span{display:block;height:100%;position:relative;}
+.tl .s-in{background:var(--ao-soft);}
+.tl .s-main{background:var(--aka);}
+.tl .s-out{background:var(--ao-soft);}
+.tl-key{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--sumi-soft);margin-top:7px;}
+.tl-key b{display:inline-block;width:11px;height:11px;vertical-align:-1px;margin-right:4px;border:1px solid var(--sumi);}
+.k-in{background:var(--ao-soft);}
+.k-main{background:var(--aka);}
+.k-sp{background:var(--lime);}
+
+/* ── しぼりこみ ─────────────────── */
+.filters{border-bottom:1px solid var(--rule);padding:20px 0 18px;margin:26px 0;}
+.frow{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;margin-bottom:11px;}
+.frow:last-of-type{margin-bottom:0;}
+.flabel{font-size:11px;letter-spacing:.2em;color:var(--sumi-soft);width:4.4em;flex:none;font-weight:700;}
+.chip{
+  font-family:inherit;font-size:12.5px;padding:4px 12px;cursor:pointer;
+  background:transparent;border:1px solid var(--rule);border-radius:999px;color:var(--sumi-soft);
+  transition:background .12s,color .12s,border-color .12s;
+}
+.chip:hover{border-color:var(--aka);color:var(--aka);}
+.chip[aria-pressed="true"]{background:var(--aka);border-color:var(--aka);color:#fff;font-weight:700;}
+.chip:focus-visible{outline:2px solid var(--ao);outline-offset:2px;}
+.count{font-size:12px;color:var(--sumi-soft);margin:14px 0 0;letter-spacing:.06em;}
+
+/* ── カード ─────────────────────── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px;}
+.card{
+  background:var(--paper-hi);border:1px solid var(--rule);border-top:4px solid var(--aka);
+  padding:18px 18px 16px;display:flex;flex-direction:column;
+}
+.card.c-minbu{border-top-color:var(--ao);}
+.card.c-shugu{border-top-color:#D9A227;}
+.card.c-shudan{border-top-color:#4C7A4A;}
+.cat{font-size:10.5px;letter-spacing:.2em;color:var(--sumi-soft);font-weight:700;margin:0 0 6px;}
+.card h3{font-family:var(--mincho);font-size:20px;font-weight:600;margin:0 0 4px;letter-spacing:.04em;line-height:1.35;}
+.tagline{font-size:12.5px;color:var(--sumi-soft);margin:0 0 14px;}
+
+/* 学年トラック */
+.track{display:flex;border:1px solid var(--sumi);margin-bottom:12px;}
+.track span{
+  flex:1;text-align:center;font-size:11px;padding:2px 0;color:var(--sumi-soft);
+  border-right:1px solid var(--rule);background:var(--lime);letter-spacing:.04em;
+}
+.track span:last-child{border-right:0;}
+.track span.on{background:var(--aka-soft);color:var(--sumi);}
+.track span.best{background:var(--aka);color:#fff;font-weight:700;}
+
+.meta{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;margin:0 0 12px;color:var(--sumi-soft);}
+.meta b{color:var(--sumi);font-weight:700;}
+.stars{color:var(--aka);letter-spacing:.1em;}
+
+.tlbox{margin:0 0 13px;}
+.tlbox .cap{font-size:11px;color:var(--sumi-soft);margin:0 0 4px;letter-spacing:.06em;}
+.card .tl{height:14px;}
+
+dl{margin:0;font-size:13px;}
+dt{font-size:10.5px;letter-spacing:.16em;color:var(--aka);font-weight:700;margin-top:10px;}
+dt:first-child{margin-top:0;}
+dd{margin:2px 0 0;color:#3C3831;}
+.warn{
+  margin-top:13px;border-left:3px solid var(--aka);background:rgba(192,54,44,.06);
+  padding:8px 10px;font-size:12.5px;color:#6E241E;
+}
+.warn::before{content:"安全・権利　";font-weight:700;letter-spacing:.14em;font-size:10.5px;}
+
+.guidelink{
+  display:block;margin-top:14px;padding-top:11px;border-top:1px solid var(--rule);
+  font-size:12.5px;letter-spacing:.06em;color:var(--ao);text-decoration:none;font-weight:700;
+}
+.guidelink:hover{color:var(--aka);}
+@media print{.guidelink{display:none;}}
+.empty{grid-column:1/-1;padding:44px 0;text-align:center;font-family:var(--mincho);font-size:16px;color:var(--sumi-soft);}
+
+/* ── 巻末 ───────────────────────── */
+footer{margin-top:48px;padding-top:24px;border-top:3px double var(--aka);font-size:13px;color:#4A463F;}
+footer h2{font-family:var(--mincho);font-size:17px;margin:0 0 10px;font-weight:600;letter-spacing:.06em;}
+footer h3{font-size:12px;letter-spacing:.14em;color:var(--aka);margin:20px 0 6px;}
+footer ul{margin:0;padding-left:1.2em;}
+footer li{margin-bottom:6px;}
+footer .legal{border-left:3px solid var(--aka);padding-left:13px;margin-top:8px;}
+footer .sig{margin-top:26px;font-size:11.5px;color:var(--sumi-soft);}
+
+@media (max-width:520px){
+  .flabel{width:100%;}
+  .grid{grid-template-columns:1fr;}
+}
+@media print{
+  body{background:#fff;}
+  .filters,.bunting{display:none;}
+  .card{break-inside:avoid;background:#fff;}
+  .grid{grid-template-columns:1fr 1fr;gap:10px;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="bunting" aria-hidden="true"></div>
+
+<header>
+  <p class="eyebrow"><a href="../">せんせいの道具箱</a> ／ 運動会</p>
+  <h1>表現運動インデックス</h1>
+  <p class="sub">持ち時間10分から逆算して、学年の演目を決める</p>
+  <p class="lede">
+    運動会の表現は「何をやるか」より先に「<strong>10分で何が入るか</strong>」が決まります。
+    入場と退場に3分、隊形移動に1分。踊れる時間は実質<strong>4〜5分</strong>——曲でいえばフルコーラス1曲分です。
+    ここでは22の演目を、その4〜5分に収まる形で整理しました。学年・難易度・練習時数・用意するもの、
+    そして毎年つまずくポイントを1枚に載せています。各カードから、動きの図・隊形図・練習計画を収めた<strong>演目ごとの指導資料</strong>が開きます。
+  </p>
+
+  <div class="budget">
+    <h2>持ち時間10分の標準配分</h2>
+    <div class="tl">
+      <span class="s-in" style="width:15%"></span>
+      <span class="s-main" style="width:50%"></span>
+      <span class="s-out" style="width:15%"></span>
+    </div>
+    <div class="tl-key">
+      <span><b class="k-in"></b>入場・整列 1分30秒</span>
+      <span><b class="k-main"></b>演技 5分</span>
+      <span><b class="k-in"></b>退場 1分30秒</span>
+      <span><b class="k-sp"></b>予備 2分</span>
+    </div>
+    <p class="note">目盛りは1分。予備2分は放送の間・写真撮影の待ち・整列のやり直しで確実に消えます。ここを削って演技を6分にすると、当日ほぼ押します。</p>
+  </div>
+</header>
+
+<div class="filters">
+  <div class="frow">
+    <span class="flabel">学年</span>
+    <button class="chip" data-f="grade" data-v="all" aria-pressed="true">すべて</button>
+    <button class="chip" data-f="grade" data-v="1" aria-pressed="false">1年</button>
+    <button class="chip" data-f="grade" data-v="2" aria-pressed="false">2年</button>
+    <button class="chip" data-f="grade" data-v="3" aria-pressed="false">3年</button>
+    <button class="chip" data-f="grade" data-v="4" aria-pressed="false">4年</button>
+    <button class="chip" data-f="grade" data-v="5" aria-pressed="false">5年</button>
+    <button class="chip" data-f="grade" data-v="6" aria-pressed="false">6年</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">系統</span>
+    <button class="chip" data-f="cat" data-v="all" aria-pressed="true">すべて</button>
+    <button class="chip" data-f="cat" data-v="dance" aria-pressed="false">ダンス</button>
+    <button class="chip" data-f="cat" data-v="minbu" aria-pressed="false">民舞・郷土芸能</button>
+    <button class="chip" data-f="cat" data-v="shugu" aria-pressed="false">手具・道具</button>
+    <button class="chip" data-f="cat" data-v="shudan" aria-pressed="false">集団演技</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">難易度</span>
+    <button class="chip" data-f="level" data-v="all" aria-pressed="true">すべて</button>
+    <button class="chip" data-f="level" data-v="1" aria-pressed="false">★ やさしい</button>
+    <button class="chip" data-f="level" data-v="2" aria-pressed="false">★★ ふつう</button>
+    <button class="chip" data-f="level" data-v="3" aria-pressed="false">★★★ 手ごたえあり</button>
+  </div>
+  <div class="frow">
+    <span class="flabel">準備</span>
+    <button class="chip" data-f="prep" data-v="all" aria-pressed="true">すべて</button>
+    <button class="chip" data-f="prep" data-v="none" aria-pressed="false">道具なしでできる</button>
+    <button class="chip" data-f="prep" data-v="make" aria-pressed="false">手作りで代用できる</button>
+    <button class="chip" data-f="prep" data-v="buy" aria-pressed="false">購入・備品が要る</button>
+  </div>
+  <p class="count" id="count"></p>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>
+  <h2>使う前に確認すること</h2>
+
+  <h3>音楽の扱い</h3>
+  <div class="legal">
+    <ul>
+      <li><b>当日、校庭で曲を流すこと</b>は著作権法38条1項で許諾不要です。①営利目的でない ②観客から料金を取らない ③出演者に報酬を払わない、の3条件を満たす運動会は通常これに該当します。</li>
+      <li><b>録画してDVDを配る／限定公開で配信する</b>のは38条の範囲外です。複製権・公衆送信権の手続きが別に必要で、市販CD音源を使っている場合はJASRAC等に加えてレコード会社（著作隣接権者）の了解も要ります。</li>
+      <li><b>音源のカット・つなぎ編集</b>は複製にあたります。体育科の授業の過程での利用は35条で説明できる可能性がありますが、編集済みデータを校外に渡す・公開するのは対象外です。</li>
+      <li><b>民謡だから自由、とは限りません。</b>曲そのものの保護期間が満了していても、市販音源には著作隣接権があり、特定の団体が作った編曲版・振付には現行の権利があります。</li>
+    </ul>
+  </div>
+
+  <h3>組体操・組立体操</h3>
+  <div class="legal">
+    <ul>
+      <li>スポーツ庁「組体操等による事故の防止について」（平成28年3月25日 事務連絡）は、<b>高い位置に上る技・跳んできた児童を受け止める技・一人に多大な負荷がかかる技</b>について、確実に安全な状態で実施できるか確認し、できないと判断される場合は実施を見合わせるよう求めています。</li>
+      <li>関連する事故防止事例集では、<b>補助者の手が届く高さで実施すること</b>、<b>俵型の平面ピラミッドは小学校では3段までが限界</b>、<b>3段以上のタワーを小学生に実施させるのは避けるべき</b>とされています。</li>
+      <li>自治体ごとに独自ガイドライン（段数上限・技の禁止）がある場合が多く、そちらが優先します。学校の安全主任・体育主任と事前に突き合わせてください。</li>
+    </ul>
+  </div>
+
+  <h3>このインデックスの見方</h3>
+  <ul>
+    <li><b>おすすめ学年</b>は6マスのトラックで表示。濃い赤が「まずここ」、淡い赤が「無理なくできる」学年です。</li>
+    <li><b>時間帯</b>のグラフは10分を10目盛りで表しています。白い部分が予備時間です。</li>
+    <li><b>練習時数</b>は体育の授業＋朝練・学年練習の合計目安です。運動会の練習は特別活動と体育科の両方にまたがるため、時数の出どころは学校の年間計画に合わせて調整してください。</li>
+    <li><b>難易度</b>は「子どもにとっての動きの難しさ」ではなく「<b>担任が10分の演目として仕上げきるまでの負荷</b>」で付けています。振付の量・隊形の複雑さ・道具準備・安全管理の合計です。</li>
+  </ul>
+
+  <h3>まとめてダウンロード</h3>
+  <p style="margin:0 0 14px"><a href="undokai-guides.zip" style="color:#2C5F87;font-weight:700">undokai-guides.zip</a> に、このページと22件の指導資料を収めてあります。校内サーバーやUSBに置けば、ネットにつながらない校務PCでもそのまま開けます。</p>
+
+  <p class="sig">記載内容は一般的な整理です。実施の可否は必ず自治体・学校のガイドラインを確認してください。オフラインで動作する単一HTMLファイルです。</p>
+</footer>
+
+</div>
+
+<script>
+var DATA = [
+{
+  name:"ポンポンでキラキラ",
+  cat:"shugu", catLabel:"手具・道具",
+  tagline:"色が動くだけで絵になる。初めての表現に最短距離",
+  grades:[1,2], best:[1,2], level:1, prep:"make",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"6〜8時間",
+  items:"スズランテープのポンポン 1人2個（作成は2時間ほど。保護者ボランティアが頼める学校も）",
+  point:"振りは8カウント×4種類まで。左右対称にせず「全部右から出す」に統一すると、覚える量が半分になります。ポンポンは腕を伸ばしきった位置で止めると、遠くの客席から色が揃って見えます。",
+  music:"BPM120〜130、8ビートの明るいポップス。イントロが短い曲を選ぶと入場が読めます。",
+  warn:null
+},
+{
+  name:"カラーバンダナの表現",
+  cat:"shugu", catLabel:"手具・道具",
+  tagline:"1枚の布で、持ち替えるたびに絵が変わる",
+  grades:[1,2,3], best:[1,2], level:1, prep:"buy",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"6〜8時間",
+  items:"バンダナ（クラス色）1人1枚。100円均一でも揃います",
+  point:"「首に巻く→手首→両手で広げる」の3段階で持ち替えると、振付を増やさずに場面転換ができます。落としたら拾わない、を最初に約束しておくこと。当日は必ず落ちます。",
+  music:"歌詞にサビの繰り返しがある曲。持ち替えのタイミングを歌詞で覚えられます。",
+  warn:null
+},
+{
+  name:"なりきり表現遊び「いきものランド」",
+  cat:"dance", catLabel:"ダンス",
+  tagline:"学習指導要領の「表現遊び」そのままを見せる",
+  grades:[1,2], best:[1], level:2, prep:"none",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"8〜10時間",
+  items:"なし。あれば耳や尻尾のワンポイントだけ",
+  point:"動きを教え込まないのがこの演目の値打ちです。「大きく／小さく／速く／ゆっくり」の4つの変化だけ与えると、子どもが自分で作ります。運動会用に教師が固定するのは、隊形と最後の決めポーズだけで十分。低学年の表現リズム遊びは、表現遊びとリズム遊びを1時間の中で組み合わせるのが指導要領解説の想定なので、授業がそのまま運動会につながります。",
+  music:"場面ごとに曲想の違う3曲をつなぐ構成が作りやすい。",
+  warn:null
+},
+{
+  name:"ダンシング玉入れ",
+  cat:"dance", catLabel:"ダンス",
+  tagline:"表現と競技を1枠に収める。時間が足りない年の切り札",
+  grades:[1,2], best:[1,2], level:1, prep:"none",
+  t:{in:1.5,main:5,out:1.5},
+  practice:"5〜7時間",
+  items:"玉入れ用具（既存の備品）",
+  point:"「踊る→笛→入れる→踊る」を2〜3セット。踊りは16カウント1種類の繰り返しで成立します。得点発表まで含めて10分に入るので、表現枠と競技枠を分けられない学校で重宝します。切り替えの合図は音楽のフェードではなく笛にすると、子どもが迷いません。",
+  music:"サビが繰り返す曲。玉入れ中は音量を絞って流し続けます。",
+  warn:null
+},
+{
+  name:"パラバルーン",
+  cat:"shugu", catLabel:"手具・道具",
+  tagline:"技を6つ並べるだけで5分がもつ",
+  grades:[1,2,3], best:[1,2], level:2, prep:"buy",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"8〜10時間",
+  items:"パラバルーン直径3〜6m（学年人数で選ぶ。1人あたり30〜40cmが目安）",
+  point:"「波→回転→メリーゴーランド→お山→気球→風船」の順が定番で、盛り上がりが自然に右肩上がりになります。技は6〜8個で5分が埋まるので、増やすより1つずつの完成度を上げるほうが見えます。全員が同時に手を離す技は、離す合図を声ではなくカウントで。",
+  music:"技ごとに区切りが分かる曲。ゆったり→速い、の展開があるものが合います。",
+  warn:"風の影響を最も受ける演目です。強風時にどの技を省くか、事前に代替プログラムを決めておくこと。中に入る技（お山・気球）は児童の視界が塞がるため、外周に必ず教職員を配置します。"
+},
+{
+  name:"カラーボード（色板返し）",
+  cat:"shugu", catLabel:"手具・道具",
+  tagline:"一斉に返す一瞬だけで成立する、潔い演目",
+  grades:[2,3,4], best:[3,4], level:2, prep:"make",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"6〜8時間",
+  items:"表裏で色の違うボード（段ボール＋色画用紙）1人1枚",
+  point:"客席から絵になるのは、全員が同時に返す瞬間だけです。そこに全部を賭けて、他の時間は持って歩く・掲げるだけでいい。返す合図は音楽のキメ（打楽器の一撃）に合わせると、目より耳で揃います。撮影される保護者のために、返す方向はメインテント側に統一を。",
+  music:"リズムのキメがはっきりした曲。ブレイクのある曲だと決まります。",
+  warn:null
+},
+{
+  name:"リズムダンス（ロック／サンバ）",
+  cat:"dance", catLabel:"ダンス",
+  tagline:"中学年の学習内容が、そのまま運動会の演目になる",
+  grades:[3,4], best:[3,4], level:2, prep:"none",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"8〜10時間",
+  items:"なし",
+  point:"中学年のリズムダンスはロックとサンバのリズムの特徴を捉えて即興的に踊ることがねらいなので、授業の延長で組めます。コツは2語だけ。ロックは「へそで8ビート」、サンバは「足を細かく」。この2つを言うと体感が変わります。運動会用には、即興部分を残しつつ、出だしと終わりの16カウントだけ全員共通にすると締まります。",
+  music:"ロック調とサンバ調を1曲ずつ、あるいはメドレーで。",
+  warn:null
+},
+{
+  name:"花笠音頭",
+  cat:"minbu", catLabel:"民舞・郷土芸能",
+  tagline:"笠が回るだけで華やか。中学年の定番",
+  grades:[3,4,5], best:[3,4], level:2, prep:"make",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"8〜10時間",
+  items:"花笠（市販品のほか、紙皿＋造花＋リボンで自作可）",
+  point:"笠の扱いは「回す・かざす・伏せる」の3種で構成できます。難しいのは振付より隊形で、笠が顔と視界を隠すため、通常より左右前後の間隔を広めに取る必要があります。回すときは笠を体から離すと隣に当たるので、体の正面で回すよう最初に決めておくこと。",
+  music:"山形の民謡。曲自体は保護期間満了ですが、市販音源には著作隣接権があります。",
+  warn:null
+},
+{
+  name:"エイサー",
+  cat:"minbu", catLabel:"民舞・郷土芸能",
+  tagline:"太鼓の音が揃った瞬間、空気が変わる",
+  grades:[3,4,5,6], best:[4,5], level:3, prep:"buy",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"10〜14時間",
+  items:"パーランクー（片面太鼓）とバチ。代用はフープ＋布、鍋蓋、ミニ太鼓",
+  point:"打つ位置を「正面・頭上・腰の横」の3か所に先に固定すると、音が揃います。位置が人によって違うと、同時に打っていても音がばらけて聞こえる。バチは短めのほうが安全で、隣に当たりにくい。腰を落とす姿勢が続くので、練習は3分打って休憩、を守ること。",
+  music:"沖縄民謡系のほか、現代のエイサー曲を使う学校が多い。",
+  warn:"創作エイサーの振付・楽曲には権利者がいます。教材DVDや講習会で習った振付を使う場合は、利用条件（校内利用のみか、公開の可否か）を必ず確認してください。"
+},
+{
+  name:"よさこい鳴子踊り",
+  cat:"minbu", catLabel:"民舞・郷土芸能",
+  tagline:"鳴子の音は、揃うと気持ちいいが、ずれると全部ばれる",
+  grades:[4,5,6], best:[5,6], level:3, prep:"buy",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"12〜16時間",
+  items:"鳴子 1人2個",
+  point:"最初から鳴子を持たせないこと。手ぶらで振付を完全に覚えてから持たせると、仕上がりが違います。音が鳴る道具は失敗が耳で分かるぶん、途中段階で子どもが自信をなくしやすい。振り下ろしは「腕を止める位置」を決めると音が締まります。",
+  music:"よさこい系の楽曲。テンポが速いので、練習用に80%速度の音源があると助かります。",
+  warn:"各よさこいチームの振付・楽曲は権利物です。学校向けに条件付きで公開されている教材か、自校で創作したものかを確認してから使ってください。"
+},
+{
+  name:"フラッグ（手旗）",
+  cat:"shugu", catLabel:"手具・道具",
+  tagline:"揃うのは見た目より先に「音」",
+  grades:[3,4,5,6], best:[5,6], level:2, prep:"make",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"10〜12時間",
+  items:"フラッグ（塩ビ管＋ビニールシートで自作可。市販品もある）",
+  point:"布が空気を切るバサッという音が、視覚より先に揃います。「音を1つにする」と言うと、子どもが自分で調整を始める。振り下ろす方向は全員同じに統一すること。左右で分けると、間隔が詰まったとき必ずぶつかります。",
+  music:"ブラス系・行進曲調が合う。キメの多い曲だと音が作りやすい。",
+  warn:"ポールの先端で目や顔を打つ事故が起きやすい演目です。前後左右2m以上の間隔を確保し、振り下ろす方向を全員で統一してください。持ち手のキャップの外れも点検を。"
+},
+{
+  name:"荒馬（青森・下北）",
+  cat:"minbu", catLabel:"民舞・郷土芸能",
+  tagline:"跳ねるだけで絵になる。運動量は最大級",
+  grades:[3,4,5], best:[3,4], level:2, prep:"make",
+  t:{in:1.5,main:3.5,out:1.5},
+  practice:"8〜12時間",
+  items:"馬の胴（段ボール＋布で自作）、腰紐、手綱",
+  point:"跳躍が続くので、演技時間は3分台に抑え、残りは隊形移動で見せるほうが最後まで持ちます。跳ぶ高さより「同じ拍で跳ぶ」ほうが揃って見えるので、そちらを揃えること。馬の胴が重いと腰に負担がかかるため、軽く作るのが第一条件です。",
+  music:"太鼓と笛の囃子。生演奏（教師の太鼓）にすると速度調整が効きます。",
+  warn:"連続跳躍の負荷が高い演目です。膝や足首の痛みの訴えには、練習量を落とすか役割を変えるかで即応してください。"
+},
+{
+  name:"南中ソーラン",
+  cat:"minbu", catLabel:"民舞・郷土芸能",
+  tagline:"腰の低さより、下げるタイミングを揃える",
+  grades:[4,5,6], best:[5,6], level:3, prep:"none",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"12〜16時間",
+  items:"なし（法被・鉢巻があるとよい）",
+  point:"腰の高さが揃うと一気に見えますが、体格差で全員を同じ高さにするのは無理があります。「各自が下げられる低さで、下げるタイミングだけ揃える」に切り替えると、見た目も子どもの負担も改善します。中腰が続くので、通しは1日2回まで。",
+  music:"「南中ソーラン」で広く使われる楽曲（伊藤多喜雄の編曲版）は現行の著作物です。",
+  warn:"楽曲は保護期間内です。当日の再生は38条で許諾不要ですが、録画してDVD配布・配信する場合は別途手続きが必要です。中腰姿勢の連続は膝への負荷が大きく、練習を詰めすぎないこと。"
+},
+{
+  name:"和傘・傘踊り",
+  cat:"minbu", catLabel:"民舞・郷土芸能",
+  tagline:"開閉のタイミングだけで場面が変わる",
+  grades:[3,4,5], best:[4,5], level:2, prep:"buy",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"8〜12時間",
+  items:"和傘または無地の傘（人数分の確保が最大の課題）",
+  point:"傘は開いた瞬間が一番強い絵になるので、その回数を絞ること。5分の中で3回までにすると、毎回効きます。回すときの傾きを45度に統一すると、上から見なくても揃って見えます。",
+  music:"和楽器を含む曲。開閉のキメを作れるものを。",
+  warn:"開いた傘は風を受けます。強風時は開く技を減らす判断を、当日の朝に決められるよう2パターン練習しておいてください。"
+},
+{
+  name:"ソーラン節（正調・網起こし）",
+  cat:"minbu", catLabel:"民舞・郷土芸能",
+  tagline:"4つの動作に分ければ、高学年なら数時間で形になる",
+  grades:[5,6], best:[5,6], level:3, prep:"none",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"10〜14時間",
+  items:"なし（法被・鉢巻・大漁旗があると映える）",
+  point:"「構える→ドッコイショ→網を起こす→網を引く」の4動作に分解して、1動作ずつ完成させます。まとめて通すのは全部できてから。掛け声は最初から大きく出させないこと。声を出すことに気を取られると動きが崩れます。動きが入ってから声を足すほうが速い。",
+  music:"北海道の民謡。曲そのものは保護期間満了ですが、市販の編曲版・音源には権利があります。",
+  warn:"中腰の連続で膝に負荷がかかります。練習は3分×3セットで区切り、痛みの訴えがあれば即中止を。"
+},
+{
+  name:"表現体操（組体操の安全版）",
+  cat:"shudan", catLabel:"集団演技",
+  tagline:"高さで見せるのをやめて、同時性で見せる",
+  grades:[5,6], best:[6], level:2, prep:"none",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"10〜14時間",
+  items:"なし（マット、体操服）",
+  point:"一人技（V字・ブリッジ・片足バランス）と、地面に足がついたままの二人技（扇・補助倒立）だけで、5分は十分に埋まります。見せ場は高さではなく「120人が同時に動きを止める瞬間」。技の難度を下げたぶん、静止の精度に振ってください。そのほうが練習も安全で、失敗も出ません。",
+  music:"静かな曲。音のない静止時間を作れる構成が効きます。",
+  warn:"スポーツ庁の事務連絡（平成28年3月25日）は、高い位置に上る技・跳んできた児童を受け止める技・一人に多大な負荷がかかる技について、安全に実施できないと判断される場合は見合わせるよう求めています。関連事例集は、補助者の手が届く高さで実施すること、俵型の平面ピラミッドは小学校で3段まで、3段以上のタワーは避けるべき、としています。自治体ガイドラインが優先します。"
+},
+{
+  name:"集団行動（行進・交差）",
+  cat:"shudan", catLabel:"集団演技",
+  tagline:"ぶつかるのは技術不足ではなく、約束の不足",
+  grades:[5,6], best:[6], level:3, prep:"none",
+  t:{in:1,main:5,out:1.5},
+  practice:"12〜16時間",
+  items:"なし（ライン引きは必須）",
+  point:"交差は「どちらの列が先に行くか」を人単位で決めます。曖昧にしたまま速度を上げると必ず接触する。歩幅と歩数をラインで可視化しておくと、当日ラインが薄れても位置が体に入っています。逆に言えば、練習でラインを引かないと最後まで揃いません。",
+  music:"一定テンポの行進曲。テンポが揺れる曲は不向きです。",
+  warn:"交差時の衝突が主な事故要因です。速度を上げるのは、全員が交差の優先順を言えるようになってからにしてください。"
+},
+{
+  name:"群読と動きの創作表現",
+  cat:"dance", catLabel:"ダンス",
+  tagline:"言葉があるぶん、踊りが苦手な子の居場所が作れる",
+  grades:[5,6], best:[5,6], level:3, prep:"none",
+  t:{in:1.5,main:5,out:1.5},
+  practice:"12〜16時間",
+  items:"なし（マイクがあると確実。屋外は声が飛びます）",
+  point:"高学年の「表現」は、ひと流れの動きで表現に取り組める段階です。テーマを子どもに決めさせると当事者性が出ますが、運動会は時間が読めることが最優先なので、構成（起承転結の4場面）と各場面の秒数は教師が先に決めてください。その枠の中の動きを子どもが作る、という分担が現実的です。",
+  music:"音楽は薄く。声を主役にするなら、BGMは間を埋める程度に。",
+  warn:"屋外では声が想像以上に届きません。マイクの本数と配置を、下見の段階で確認してください。"
+},
+{
+  name:"和太鼓・代用太鼓",
+  cat:"shugu", catLabel:"手具・道具",
+  tagline:"音そのものが演目になる。楽器がなくても成立する",
+  grades:[4,5,6], best:[5,6], level:2, prep:"make",
+  t:{in:1.5,main:4,out:1.5},
+  practice:"10〜14時間",
+  items:"和太鼓（備品）、またはタイヤ・バケツ・ペットボトルで代用",
+  point:"打つ動作は大きく、音は揃える。この2つは両立しにくいので、まず音を揃え、揃ってから振りを大きくします。逆順でやると最後まで音がばらけます。代用太鼓なら音量が足りないので、集音マイクの位置を先に確保しておくこと。",
+  music:"生音のみで成立します。BGMなしの構成も選べます。",
+  warn:null
+},
+{
+  name:"カップス（cup rhythm）",
+  cat:"shugu", catLabel:"手具・道具",
+  tagline:"全員が座ったまま演じる、めずらしい表現",
+  grades:[4,5,6], best:[4,5], level:2, prep:"make",
+  t:{in:1.5,main:3.5,out:1.5},
+  practice:"8〜12時間",
+  items:"プラスチックカップ 1人1個（割れない素材で）",
+  point:"8カウント1パターンを全員が覚えるだけで成立します。難しいのは技術ではなく音量。屋外では手拍子より音が小さく、客席にほとんど届きません。カップを大きめの容器に替える、集音マイクを立てる、体育館前で実施するなど、音の設計を先にしてください。それが解けないなら別の演目のほうがいいです。",
+  music:"BGMは薄く。カップの音が主役です。",
+  warn:"屋外では音が届きにくい演目です。実施を決める前に、実際の会場でグラウンド中央から客席まで音が届くか試してください。"
+},
+{
+  name:"フォークダンス",
+  cat:"shudan", catLabel:"集団演技",
+  tagline:"入退場が最短。時間が読めない年に強い",
+  grades:[5,6], best:[5,6], level:1, prep:"none",
+  t:{in:1,main:4,out:1},
+  practice:"5〜8時間",
+  items:"なし",
+  point:"高学年の表現運動の内容にフォークダンスが位置づけられているので、授業がそのまま使えます。輪を作るだけで隊形が完成するため、入退場が他の演目より1分近く短くて済む。プログラムが押している年、この枠が全体を救います。手をつなぐことに抵抗がある児童への配慮は、事前に別の方法（バンダナの端を持つなど）を用意しておくこと。",
+  music:"マイムマイム、オクラホマミキサーなど。多くが保護期間満了の民謡です。",
+  warn:null
+},
+{
+  name:"隊形で描く（人文字・ムーブメント）",
+  cat:"shudan", catLabel:"集団演技",
+  tagline:"上から見て完成する演目。撮影の位置が生命線",
+  grades:[5,6], best:[6], level:3, prep:"make",
+  t:{in:1.5,main:4.5,out:1.5},
+  practice:"12〜16時間",
+  items:"位置マーカー（ラインまたはカラーコーン）、色板があれば併用",
+  point:"最大の落とし穴は、客席の高さからは形が見えないことです。校舎の窓や脚立からの撮影を前提にするなら、その旨を保護者に事前に伝えないと「何をしているか分からない演目」になります。地上から見て絵になる横方向の動き（波・列の入れ替え）を必ず混ぜてください。位置は覚えさせるのではなく、ラインで示すのが確実です。",
+  music:"展開のある曲。隊形が完成する瞬間に音のピークを合わせます。",
+  warn:null
+}
+];
+
+var GUIDE = {"ポンポンでキラキラ": "pompom", "カラーバンダナの表現": "bandana", "なりきり表現遊び「いきものランド」": "ikimono", "ダンシング玉入れ": "tamaire", "パラバルーン": "parachute", "カラーボード（色板返し）": "colorboard", "リズムダンス（ロック／サンバ）": "rhythmdance", "花笠音頭": "hanagasa", "エイサー": "eisa", "よさこい鳴子踊り": "yosakoi", "荒馬（青森・下北）": "aramaage", "南中ソーラン": "nanchu", "和傘・傘踊り": "kasaodori", "ソーラン節（正調・網起こし）": "soran", "表現体操（組体操の安全版）": "hyogentaiso", "集団行動（行進・交差）": "shudankodo", "群読と動きの創作表現": "gundoku", "和太鼓・代用太鼓": "taiko", "カップス（cup rhythm）": "cups", "フォークダンス": "folkdance", "隊形で描く（人文字・ムーブメント）": "jinmoji", "フラッグ（手旗）": "flag"};
+var CAT_ORDER = {dance:0,minbu:1,shugu:2,shudan:3};
+var state = {grade:"all",cat:"all",level:"all",prep:"all"};
+var grid = document.getElementById("grid");
+var countEl = document.getElementById("count");
+
+/* 万国旗 */
+(function(){
+  var b = document.querySelector(".bunting"), s="";
+  for(var i=0;i<30;i++) s += "<i></i>";
+  b.innerHTML = s;
+})();
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function track(g,best){
+  var out = '<div class="track" aria-label="おすすめ学年">';
+  for(var i=1;i<=6;i++){
+    var cls = best.indexOf(i)>-1 ? "best" : (g.indexOf(i)>-1 ? "on" : "");
+    out += '<span class="'+cls+'">'+i+'</span>';
+  }
+  return out+'</div>';
+}
+
+function timeline(t){
+  var total=10;
+  var w=function(m){return (m/total*100).toFixed(1)+"%";};
+  var spare = (total - t.in - t.main - t.out);
+  return '<div class="tlbox">'+
+    '<p class="cap">入場 '+t.in+'分 ／ 演技 '+t.main+'分 ／ 退場 '+t.out+'分 ／ 予備 '+spare.toFixed(1).replace(/\.0$/,"")+'分</p>'+
+    '<div class="tl">'+
+      '<span class="s-in" style="width:'+w(t.in)+'"></span>'+
+      '<span class="s-main" style="width:'+w(t.main)+'"></span>'+
+      '<span class="s-out" style="width:'+w(t.out)+'"></span>'+
+    '</div></div>';
+}
+
+function card(d){
+  var stars = "★★★".slice(0,d.level) + '<span style="opacity:.25">' + "★★★".slice(0,3-d.level) + '</span>';
+  var h = '<article class="card c-'+d.cat+'">';
+  h += '<p class="cat">'+esc(d.catLabel)+'</p>';
+  h += '<h3>'+esc(d.name)+'</h3>';
+  h += '<p class="tagline">'+esc(d.tagline)+'</p>';
+  h += track(d.grades,d.best);
+  h += '<p class="meta"><span>難易度 <b class="stars">'+stars+'</b></span><span>練習時数 <b>'+esc(d.practice)+'</b></span></p>';
+  h += timeline(d.t);
+  h += '<dl>';
+  h += '<dt>用意するもの</dt><dd>'+esc(d.items)+'</dd>';
+  h += '<dt>指導のポイント</dt><dd>'+esc(d.point)+'</dd>';
+  h += '<dt>音源</dt><dd>'+esc(d.music)+'</dd>';
+  h += '</dl>';
+  if(d.warn) h += '<p class="warn">'+esc(d.warn)+'</p>';
+  if(GUIDE[d.name]) h += '<a class="guidelink" href="'+GUIDE[d.name]+'.html">指導資料をひらく →</a>';
+  h += '</article>';
+  return h;
+}
+
+function match(d){
+  if(state.grade!=="all" && d.grades.indexOf(parseInt(state.grade,10))<0) return false;
+  if(state.cat!=="all" && d.cat!==state.cat) return false;
+  if(state.level!=="all" && String(d.level)!==state.level) return false;
+  if(state.prep!=="all" && d.prep!==state.prep) return false;
+  return true;
+}
+
+function render(){
+  var list = DATA.filter(match).sort(function(a,b){
+    var c = CAT_ORDER[a.cat]-CAT_ORDER[b.cat];
+    if(c) return c;
+    return a.best[0]-b.best[0];
+  });
+  grid.innerHTML = list.length
+    ? list.map(card).join("")
+    : '<p class="empty">条件に合う演目がありません。しぼりこみを外してみてください。</p>';
+  countEl.textContent = list.length + " 件を表示中（全 " + DATA.length + " 件）";
+}
+
+document.querySelectorAll(".chip").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    var f=btn.dataset.f;
+    state[f]=btn.dataset.v;
+    document.querySelectorAll('.chip[data-f="'+f+'"]').forEach(function(b){
+      b.setAttribute("aria-pressed", b===btn ? "true":"false");
+    });
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
