@@ -57,12 +57,6 @@
     margin:0;
     letter-spacing:.02em;
   }
-  .site-lead{
-    margin:6px 0 0;
-    font-size:.9rem;
-    color:var(--text-muted);
-    max-width:44em;
-  }
   .site-repo{
     display:inline-block;
     margin-top:10px;
@@ -73,6 +67,12 @@
     border-bottom:1px dotted var(--accent-soft);
   }
   .site-repo:hover{color:var(--accent-deep);}
+  .site-lead{
+    margin:6px 0 0;
+    font-size:.9rem;
+    color:var(--text-muted);
+    max-width:44em;
+  }
 
   /* ================= 安全性バンド ================= */
   .trust{
@@ -902,6 +902,13 @@ $("reset").addEventListener("click", () => {
 // ---- tools.js の内容を画面に反映 ----
 function applySite(){
   if (site.name) $("site-title").textContent = "🌱 " + site.name;
+  const repo = $("site-repo");
+  if (site.repo){
+    repo.href = site.repo;
+    repo.textContent = site.repo.replace(/^https?:\/\//, "");
+  } else {
+    repo.hidden = true;
+  }
   $("trust-points").textContent = trustItems.map(([t]) => t).join("・");
   $("trust-list").innerHTML = trustItems.map(([title, sub]) => `
       <li>
@@ -910,13 +917,6 @@ function applySite(){
       </li>`).join("");
   const lead = [site.lead, site.lead2].filter(Boolean);
   $("site-lead").innerHTML = lead.map(esc).join("<br>");
-  const repo = $("site-repo");
-  if (site.repo){
-    repo.href = site.repo;
-    repo.textContent = site.repo.replace(/^https?:\/\//, "");
-  } else {
-    repo.hidden = true;
-  }
 }
 
 // tools.js が読めていない／空のときは、白紙にせず理由を出す
