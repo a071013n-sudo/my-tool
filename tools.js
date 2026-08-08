@@ -87,7 +87,7 @@ const SAFETY_EXE = {
 };
 
 window.TOOLS = [
-{
+/* {
   id: "undokai-hyogen",
   name: "運動会・表現運動インデックス",
   icon: "🏃",
@@ -105,7 +105,7 @@ window.TOOLS = [
     login:   { lv:"ok", s:"ログイン不要",     d:"アカウントは必要ありません。" },
     data:    { lv:"ok", s:"外部送信なし",     d:"お手元のパソコンの中だけで処理されます。" }
   }
-},
+}, */
   {
     id: "task_cho",
     icon: "🗒️",
