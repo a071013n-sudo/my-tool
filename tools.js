@@ -87,6 +87,7 @@ const SAFETY_EXE = {
 };
 
 window.TOOLS = [
+// 動作不良のため、運動会は一時的にコメントアウト
 /* {
   id: "undokai-hyogen",
   name: "運動会・表現運動インデックス",
