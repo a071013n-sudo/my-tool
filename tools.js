@@ -97,7 +97,7 @@ window.TOOLS = [
   updated: "2026-08",
   tags: ["運動会", "表現運動", "体育", "印刷"],
   thumbnail: "images/undokai_hyogen.png",
-  download: "undokai-hyogen/index.html",
+  download: "undokai_hyogen/index.html",
   repo: "https://github.com/a071013n-sudo/my-tool",
   safety: {
     install: { lv:"ok", s:"インストール不要", d:"ブラウザで開くだけで使えます。" },
