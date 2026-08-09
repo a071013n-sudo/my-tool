@@ -86,25 +86,6 @@ const SAFETY_EXE = {
 };
 
 window.TOOLS = [
-/*{
-  id: "undokai-hyogen",
-  name: "運動会・表現運動インデックス",
-  icon: "🏃",
-  category: "授業・行事の資料",
-  env: "ブラウザのみ",
-  summary: "22演目を学年と難易度で絞り込み。演目ごとに指導資料つき",
-  description: "小学校の運動会で行う表現運動22演目のインデックスです。持ち時間10分からの逆算、おすすめ学年、難易度、練習時数を並べて比べられます。各演目には、動きの図・隊形図・練習計画・選曲の条件・安全チェックリストを収めた指導資料があり、印刷するとA4に整います。音楽著作権と組体操の安全に関する整理も入れてあります。",
-  updated: "2026-08",
-  tags: ["インストール不要", "校務PCで使える", "HTMLファイル","運動会", "表現運動", "体育", "印刷"],
-  thumbnail: "images/undokai_hyogen.png",
-  download: "undokai-hyogen/index.html",
-  repo: "https://github.com/a071013n-sudo/my-tool",
-  safety: {
-    install: { lv:"ok", s:"インストール不要", d:"ブラウザで開くだけで使えます。" },
-    login:   { lv:"ok", s:"ログイン不要",     d:"アカウントは必要ありません。" },
-    data:    { lv:"ok", s:"外部送信なし",     d:"お手元のパソコンの中だけで処理されます。" }
-  }
-},*/
   {
     id: "task_cho",
     icon: "🗒️",
@@ -119,6 +100,21 @@ window.TOOLS = [
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_HTML
   },
+ {
+    id: "PTconf_adj",
+    icon: "🕐",
+    name: "個人面談日程自動調整",
+    category: "校務・事務",
+    env: "ブラウザのみ",
+    tags: ["インストール不要", "校務PCで使える", "HTMLファイル"],
+    summary: "全学年分の個人面談の希望を調整。きょうだい連続配置可。",
+    description: "希望調査の結果を貼り付けると、きょうだいの連続配置と教室数を守ったまま割り付けます。\nFormなどで希望調査をとれば更に楽。\n出力は一覧表と保護者向けの個別通知文。",
+    thumbnail: "images/task_cho.png",
+    download: "https://github.com/a071013n-sudo/my-tool/releases/download/PTconf_adj/PTconf_adj.html",
+    repo: "https://github.com/a071013n-sudo/my-tool",
+    safety: SAFETY_HTML
+  },
+
   {
     id: "timetable_gene",
     icon: "🗓️",
