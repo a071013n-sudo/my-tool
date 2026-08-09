@@ -227,7 +227,7 @@ window.TOOLS = [
     summary: "探すのが大変な、学芸会に使っていい脚本のインデックス。ここから生成AIと脚本を考えると楽です。",
     description: "意外と探すのが大変な、学芸会に使っていい脚本のインデックス。\nここから生成AIと脚本を考えると楽です。",
     thumbnail: "images/gakugeikai_index.png",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/gakugeikai_index/gakugeikai_index.exe",
+    download: "https://github.com/a071013n-sudo/my-tool/releases/download/gakugeikai_index/gakugeikai_index.html",
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_EXE
   },
@@ -241,7 +241,7 @@ window.TOOLS = [
     summary: "運動会や学芸会の音響編集に必要な機能だけに絞りました。MP3で出力します。",
     description: "運動会や学芸会の音響編集に必要な機能だけにしました。\nMP3で出力をします。",
     thumbnail: "images/waveform_editor.png",
-    download: "https://github.com/a071013n-sudo/my-tool/releases/download/waveform_editor/waveform_editor.exe",
+    download: "https://github.com/a071013n-sudo/my-tool/releases/download/waveform_editor/waveform_editor.html",
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_EXE
   }
