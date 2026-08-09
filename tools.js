@@ -229,7 +229,7 @@ window.TOOLS = [
     thumbnail: "images/gakugeikai_index.png",
     download: "https://github.com/a071013n-sudo/my-tool/releases/download/gakugeikai_index/gakugeikai_index.html",
     repo: "https://github.com/a071013n-sudo/my-tool",
-    safety: SAFETY_EXE
+    safety: SAFETY_HTML
   },
   {
     id: "waveform_editor",
@@ -243,6 +243,6 @@ window.TOOLS = [
     thumbnail: "images/waveform_editor.png",
     download: "https://github.com/a071013n-sudo/my-tool/releases/download/waveform_editor/waveform_editor.html",
     repo: "https://github.com/a071013n-sudo/my-tool",
-    safety: SAFETY_EXE
+    safety: SAFETY_HTML
   }
 ];
