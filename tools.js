@@ -86,7 +86,7 @@ const SAFETY_EXE = {
 };
 
 window.TOOLS = [
-/*{
+{
   id: "undokai-hyogen",
   name: "運動会・表現運動インデックス",
   icon: "🏃",
@@ -95,7 +95,7 @@ window.TOOLS = [
   summary: "22演目を学年と難易度で絞り込み。演目ごとに指導資料つき",
   description: "小学校の運動会で行う表現運動22演目のインデックスです。持ち時間10分からの逆算、おすすめ学年、難易度、練習時数を並べて比べられます。各演目には、動きの図・隊形図・練習計画・選曲の条件・安全チェックリストを収めた指導資料があり、印刷するとA4に整います。音楽著作権と組体操の安全に関する整理も入れてあります。",
   updated: "2026-08",
-  tags: ["運動会", "表現運動", "体育", "印刷"],
+  tags: ["インストール不要", "校務PCで使える", "HTMLファイル","運動会", "表現運動", "体育", "印刷"],
   thumbnail: "images/undokai_hyogen.png",
   download: "undokai-hyogen/index.html",
   repo: "https://github.com/a071013n-sudo/my-tool",
@@ -104,7 +104,7 @@ window.TOOLS = [
     login:   { lv:"ok", s:"ログイン不要",     d:"アカウントは必要ありません。" },
     data:    { lv:"ok", s:"外部送信なし",     d:"お手元のパソコンの中だけで処理されます。" }
   }
-},*/
+},
   {
     id: "task_cho",
     icon: "🗒️",
@@ -181,7 +181,7 @@ window.TOOLS = [
     name: "表記便覧に合わせてExcelやWordを自動で修正",
     category: "文書・表記",
     env: "ブラウザのみ",
-    tags: ["インストール不要", "校務PCで使える", "所見の表記統一"],
+    tags: ["インストール不要", "校務PCで使える", "所見の表記統一", "HTMLファイル"],
     summary: "所見などのExcel・Wordの表記を、表記便覧に合わせて自動で直します。組織で表記を統一できます。",
     description: "よく考えたら所見はみなさんExcelで書いていたことに気付いたので、自動で修正できるものを作成しました。\nこのファイル上でのみ動作するので、情報は外部に漏れません。\n組織で簡単に表記を統一できます。",
     thumbnail: "images/hyoki_syusei.png",
@@ -223,7 +223,7 @@ window.TOOLS = [
     name: "学芸会の脚本インデックス",
     category: "行事",
     env: "Windows",
-    tags: ["インストール不要", "実行ファイル"],
+    tags: ["インストール不要","HTMLファイル"],
     summary: "探すのが大変な、学芸会に使っていい脚本のインデックス。ここから生成AIと脚本を考えると楽です。",
     description: "意外と探すのが大変な、学芸会に使っていい脚本のインデックス。\nここから生成AIと脚本を考えると楽です。",
     thumbnail: "images/gakugeikai_index.png",
@@ -237,7 +237,7 @@ window.TOOLS = [
     name: "音楽データ波形編集ソフト",
     category: "行事",
     env: "Windows",
-    tags: ["インストール不要", "校務PCで使える", "実行ファイル"],
+    tags: ["インストール不要", "校務PCで使える", "HTMLファイル"],
     summary: "運動会や学芸会の音響編集に必要な機能だけに絞りました。MP3で出力します。",
     description: "運動会や学芸会の音響編集に必要な機能だけにしました。\nMP3で出力をします。",
     thumbnail: "images/waveform_editor.png",
