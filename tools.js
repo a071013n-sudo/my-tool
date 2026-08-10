@@ -123,7 +123,7 @@ window.TOOLS = [
     tags: ["インストール不要", "校務PCで使える", "HTMLファイル"],
     summary: "全学年分の個人面談の希望を調整。きょうだい連続配置可。",
     description: "希望調査の結果を貼り付けると、きょうだいの連続配置と教室数を守ったまま割り付けます。\nFormなどで希望調査をとれば更に楽。\n出力は一覧表と保護者向けの個別通知文。",
-    thumbnail: "images/task_cho.png",
+    thumbnail: "images/PTconf_adj.png",
     download: "https://github.com/a071013n-sudo/my-tool/releases/download/PTconf_adj/PTconf_adj.html",
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_HTML
