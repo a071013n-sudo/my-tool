@@ -100,7 +100,6 @@ window.TOOLS = [
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_HTML
   },
-window.TOOLS = [
   {
     id: "task_cho_jochu",
     icon: "🗒️",
@@ -129,7 +128,6 @@ window.TOOLS = [
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_HTML
   },
-
   {
     id: "timetable_gene",
     icon: "🗓️",
