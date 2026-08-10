@@ -100,6 +100,21 @@ window.TOOLS = [
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_HTML
   },
+window.TOOLS = [
+  {
+    id: "task_cho_jochu",
+    icon: "🗒️",
+    name: "タスク管理ソフト（常駐型）",
+    category: "校務・事務",
+    env: "Windows",
+    tags: ["インストール不要", "校務PCで使える", "実行ファイル"],
+    summary: "ブラウザを開く必要があったタスク管理ソフトを、常駐型にしてみました。",
+    description: "タスク管理ソフトの常駐型\n定時での通知の設定ができます。",
+    thumbnail: "images/task_cho.png",
+    download: "https://github.com/a071013n-sudo/my-tool/releases/download/task_cho_jochu/task_cho_jochu.exe",
+    repo: "https://github.com/a071013n-sudo/my-tool",
+    safety: SAFETY_EXE
+  },
  {
     id: "PTconf_adj",
     icon: "🕐",
