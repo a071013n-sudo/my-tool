@@ -128,6 +128,20 @@ window.TOOLS = [
     repo: "https://github.com/a071013n-sudo/my-tool",
     safety: SAFETY_HTML
   },
+ {
+    id: "PTconf_adj_full",
+    icon: "🕐",
+    name: "個人面談日程自動調整（フルセット）",
+    category: "校務・事務",
+    env: "ブラウザのみ",
+    tags: ["インストール不要", "校務PCで使える", "HTMLファイル"],
+    summary: "「個人面談日程自動調整」のフルセット。Formのテンプレや、紙で配布する際のテンプレも。",
+    description: "希望調査のFormを生成するGASや、紙配布する際のテンプレなど。\n入力が楽になるFormの構成すら考えなくて大丈夫です。",
+    thumbnail: "images/PTconf_adj_full.png",
+    download: "https://github.com/a071013n-sudo/my-tool/releases/download/PTconf_adj_full/PTconf_adj_full.zip",
+    repo: "https://github.com/a071013n-sudo/my-tool",
+    safety: SAFETY_HTML
+  },
   {
     id: "timetable_gene",
     icon: "🗓️",

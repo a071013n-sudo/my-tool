@@ -31,7 +31,7 @@ GitHubの画面から直接編集できます（スマホからでも可）。
   summary: "一覧カード用の短い説明",
   updated: "2026-08",               // YYYY-MM 形式
   download: "https://github.com/.../releases",
-  repo: "https://github.com/...",
+  repo: "https://github.com/.../",
 
   // 先生方の判断材料。実態どおりに書いてください
   safety: {
@@ -60,6 +60,37 @@ GitHubから「ワークフローが失敗しました」というメールが�
 なお `tools.js` が壊れていても、サイトは白紙にはならず
 「ツール情報を読み込めませんでした」と表示されます。
 
+## `software` フォルダに新しいファイルを置くと（自動取り込み）
+
+`software/` フォルダに新しいファイルを追加してpushすると、GitHubのサーバー上で
+自動的に次の処理が行われ、確認用の**プルリクエスト（PR）**が作られます。
+
+- **HTMLファイル**：起動画面のスクリーンショットを自動撮影し、`tools.js` に
+  紹介文の下書きを追加します。
+- **exeなど他の形式**：起動して画面を撮影する手段がないため、
+  スクリーンショットは「スクリーンショット未設定」のダミー画像、
+  紹介文も「要確認」の下書きになります。
+
+どちらの場合も、できあがるのは**下書き**です。GitHubの「Pull requests」タブに
+「新しいソフトの取り込み（確認してください）」というPRが出るので、開いて
+
+1. スクリーンショットが正しいか
+2. 名前・説明・カテゴリが実際の内容と合っているか
+3. 安全性（safety）の記載が実態と合っているか（特にexeは要チェック）
+
+を確認し、問題なければ緑の「Merge pull request」ボタンを押してください。
+押すと数分後にサイトとチラシPDFが更新されます（このとき元のファイルは
+`software/` フォルダから取り除かれ、Releasesに移動しています）。
+
+**うまく動かないとき：** リポジトリの
+`Settings → Actions → General → Workflow permissions` で
+
+- 「Read and write permissions」
+- 「Allow GitHub Actions to create and approve pull requests」
+
+の両方にチェックが入っているか確認してください（初期状態ではオフになっている
+ことがあります）。
+
 ## `.github` の中身について
 
 `.github` フォルダの中のファイルは、**GitHubのサーバー上でだけ動きます。**
@@ -73,9 +104,13 @@ GitHubから「ワークフローが失敗しました」というメールが�
 | `tools.js` | 掲載データ | **ここだけ編集** |
 | `index.html` | 表示の仕組み | 見た目を変えるときだけ |
 | `flyer.pdf` | A4紹介チラシ | 自動生成。手で触らない |
+| `software/` | 新しいソフトの置き場所 | ここにファイルを置くだけ |
 | `.github/scripts/make_flyer.py` | チラシの見た目 | チラシのデザイン変更時 |
 | `.github/scripts/tools_to_json.cjs` | tools.js の確認 | 触らない |
+| `.github/scripts/process_new_software.cjs` | `software/` の中身を取り込む処理 | 触らない |
+| `.github/scripts/upload_releases.cjs` | Releasesへの自動アップロード処理 | 触らない |
 | `.github/workflows/flyer.yml` | 自動化の設定 | ほぼ触らない |
+| `.github/workflows/software-intake.yml` | `software/` 取り込みの自動化の設定 | ほぼ触らない |
 
 ## 移行時の注意
 
